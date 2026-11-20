@@ -1,0 +1,15 @@
+node_modules
+out
+release
+runtime
+.env
+.env.*
+__pycache__
+*.pyc
+.DS_Store
+supabase/.temp
+.secrets.env
+supabase/migrations/0002_owner_key.sql
+.wrangler
+.pytest_cache
+supabase/.branches

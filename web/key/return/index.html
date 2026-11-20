@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checking checkpoint · Luger</title>
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css">
+</head>
+<body><div class="wrap">
+<header class="site"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></header>
+<h1>Checking your checkpoint</h1>
+<p class="lead" id="msg">One moment.</p>
+<p class="err" id="err" role="alert"></p>
+<a class="btn" id="back" href="/key/" hidden>Back to checkpoints</a>
+</div>
+<script src="/config.js"></script><script src="/site.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search)
+  const saved = JSON.parse(localStorage.getItem('luger.step') || 'null')
+  // Dynamic links carry s and t; static links (LootLabs, Work.ink) rely on what this browser saved.
+  const session = q.get('s') || saved?.session || localStorage.getItem('luger.session')
+  const token = q.get('t') || saved?.token
+  $('#back').href = `/key/?s=${encodeURIComponent(session || '')}`
+  if (!session || !token) {
+    $('#msg').textContent = ''
+    $('#err').textContent = 'This checkpoint was not started from the key page in this browser. Start it from the key page.'
+    show($('#back'), true)
+    return
+  }
+  try {
+    await call('checkpoint', { action: 'complete', session, token, hash: q.get('hash'), workinkToken: q.get('token') })
+    localStorage.removeItem('luger.step')
+    location.replace(`/key/?s=${encodeURIComponent(session)}`)
+  } catch (e) {
+    $('#msg').textContent = ''
+    $('#err').textContent = e.message
+    show($('#back'), true)
+  }
+})()
+</script>
+</body></html>

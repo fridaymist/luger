@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free key · Luger</title>
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css">
+</head>
+<body><div class="wrap">
+<header class="site"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></header>
+<h1 id="title">Get your free key</h1>
+<p class="lead" id="lead">Pass each checkpoint and your key goes straight to Luger.</p>
+<div class="track" id="track" aria-hidden="true"></div>
+<p class="muted" id="progress"></p>
+
+<section id="pick">
+  <div class="choices" id="choices"></div>
+  <button class="btn primary" id="go">Continue</button>
+</section>
+
+<section id="done" hidden>
+  <p>Your key is ready. Luger picks it up by itself. Go back to the app.</p>
+  <div class="key" id="key"></div>
+  <button class="btn" id="copy">Copy key</button>
+</section>
+
+<section id="sent" hidden>
+  <p>Your key was delivered to Luger. You can close this page.</p>
+</section>
+
+<p class="err" id="err" role="alert"></p>
+<footer>Each checkpoint opens an ad page from the provider you choose. Finish it and it brings you back here.</footer>
+</div>
+<script src="/config.js"></script><script src="/site.js"></script>
+<script>
+const PROVIDERS = {
+  lootlabs: ['LootLabs', 'Short ad page, usually the quickest'],
+  linkvertise: ['Linkvertise', 'Familiar ad page with a short wait'],
+  workink: ['Work.ink', 'Light ads with an optional offer step']
+}
+const session = new URLSearchParams(location.search).get('s')
+const err = $('#err')
+
+function render(st) {
+  $('#track').innerHTML = Array.from({ length: st.steps }, (_, i) => `<span class="${i < st.step ? 'on' : ''}"></span>`).join('')
+  $('#progress').textContent = st.done ? 'All checkpoints done.' : `Checkpoint ${st.step + 1} of ${st.steps}`
+  show($('#pick'), !st.done)
+  show($('#done'), st.done && !!st.key)
+  show($('#sent'), st.done && !st.key)
+  if (st.key) $('#key').textContent = st.key
+  if (!st.done) {
+    $('#choices').innerHTML = st.providers.map((p) => `
+      <label class="choice"><input type="radio" name="p" value="${p}" ${p === st.provider ? 'checked' : ''}>
+      <span>${PROVIDERS[p][0]}<small>${PROVIDERS[p][1]}</small></span></label>`).join('')
+  }
+}
+
+async function load() {
+  if (!session) { err.textContent = 'Open this page from Luger: Get a free key.'; show($('#pick'), false); return }
+  localStorage.setItem('luger.session', session)
+  try { render(await call('checkpoint', { action: 'status', session })) } catch (e) { err.textContent = e.message; show($('#pick'), false) }
+}
+
+$('#go').onclick = async () => {
+  err.textContent = ''
+  $('#go').disabled = true
+  try {
+    const provider = document.querySelector('input[name=p]:checked')?.value
+    const { url, token } = await call('checkpoint', { action: 'next', session, provider })
+    localStorage.setItem('luger.step', JSON.stringify({ session, token }))
+    location.href = url
+  } catch (e) { err.textContent = e.message; $('#go').disabled = false }
+}
+$('#copy').onclick = () => copy($('#key').textContent, $('#copy'))
+load()
+</script>
+</body></html>

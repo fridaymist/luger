@@ -1,0 +1,48 @@
+# Builds Luger for Windows, macOS and Linux and publishes a GitHub release.
+# Start it by pushing a version tag:  git tag v0.9.1 && git push --tags
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14        # Apple silicon; also publishes the Mac update feed
+            target: mac
+            publish: always
+          - os: macos-13        # Intel Macs: installer attached to the release
+            target: mac
+            publish: never
+          - os: windows-latest
+            target: win
+            publish: always
+          - os: ubuntu-22.04
+            target: linux
+            publish: always
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/fetch-python.mjs
+      - run: npx electron-vite build
+      - run: npx electron-builder --${{ matrix.target }} --publish ${{ matrix.publish }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - name: Attach Intel Mac installer
+        if: matrix.publish == 'never'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for i in $(seq 1 30); do gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 && break; sleep 20; done
+          gh release upload "$GITHUB_REF_NAME" release/*.dmg release/*.zip --clobber

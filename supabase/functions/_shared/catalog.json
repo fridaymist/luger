@@ -1,0 +1,172 @@
+{
+  "robloxDefaults": {
+    "forward": "w", "left": "a", "back": "s", "right": "d", "jump": "space",
+    "interact": "e", "shift_lock": "shift", "chat": "/", "zoom_in": "i", "zoom_out": "o",
+    "rotate_left": ",", "rotate_right": ".", "menu": "esc",
+    "slot_1": "1", "slot_2": "2", "slot_3": "3", "slot_4": "4", "slot_5": "5",
+    "slot_6": "6", "slot_7": "7", "slot_8": "8", "slot_9": "9", "slot_10": "0"
+  },
+  "games": [
+    {
+      "id": "fisch", "placeId": 16732694052, "name": "Fisch",
+      "controls": { "cast": "mouse1", "reel": "mouse1", "shake_click": "mouse1", "ui_navigation": "\\", "shake_confirm": "enter", "equip_rod": "1" },
+      "mastery": { "endless": true, "repeatEveryMinutes": 600, "repeatReward": { "ammo": 400, "xp": 600 } },
+      "achievements": [
+        { "id": "fisch.welcome", "name": "Welcome to Fisch!", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "fisch.angler", "name": "Experienced Angler", "minutes": 60, "reward": { "ammo": 120, "xp": 150 } },
+        { "id": "fisch.moosewood", "name": "Moosewood Regular", "minutes": 300, "reward": { "ammo": 250, "xp": 300 } },
+        { "id": "fisch.roslit", "name": "Roslit Bay Reeler", "minutes": 720, "reward": { "ammo": 400, "xp": 500, "frame": "frame.hook" } },
+        { "id": "fisch.snowcap", "name": "Snowcap Survivor", "minutes": 1500, "reward": { "ammo": 600, "xp": 800 } },
+        { "id": "fisch.desolate", "name": "Desolate Deep Diver", "minutes": 3000, "reward": { "ammo": 900, "xp": 1200, "theme": "theme.abyss" } },
+        { "id": "fisch.depths", "name": "Dweller of the Depths", "minutes": 6000, "reward": { "ammo": 1400, "xp": 2000, "title": "Depths Dweller" } },
+        { "id": "fisch.legend", "name": "Legend of the Deep", "minutes": 12000, "reward": { "ammo": 2500, "xp": 4000, "title": "Legend of the Deep" } }
+      ]
+    },
+    {
+      "id": "bss", "placeId": 1537690962, "name": "Bee Swarm Simulator",
+      "controls": { "convert_honey": "e", "use_item": "mouse1", "slot_1": "1", "slot_2": "2", "slot_3": "3", "slot_4": "4", "slot_5": "5", "slot_6": "6", "slot_7": "7" },
+      "mastery": { "endless": false },
+      "achievements": [
+        { "id": "bss.welcome", "name": "Welcome to the Hive", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "bss.sunflower", "name": "Sunflower Starter", "minutes": 60, "reward": { "ammo": 120, "xp": 150 } },
+        { "id": "bss.clover", "name": "Clover Collector", "minutes": 300, "reward": { "ammo": 250, "xp": 300 } },
+        { "id": "bss.pine", "name": "Pine Tree Regular", "minutes": 900, "reward": { "ammo": 450, "xp": 600, "frame": "frame.comb" } },
+        { "id": "bss.mountain", "name": "Mountain Top Climber", "minutes": 1800, "reward": { "ammo": 700, "xp": 900 } },
+        { "id": "bss.coconut", "name": "Coconut Crusher", "minutes": 4200, "reward": { "ammo": 1000, "xp": 1400, "theme": "theme.honeycomb" } },
+        { "id": "bss.pepper", "name": "Pepper Patch Veteran", "minutes": 9000, "reward": { "ammo": 1600, "xp": 2400, "title": "Pepper Patch Veteran" } },
+        { "id": "bss.royalty", "name": "Hive Royalty", "minutes": 18000, "reward": { "ammo": 3000, "xp": 5000, "title": "Hive Royalty" } }
+      ]
+    },
+    {
+      "id": "gag", "placeId": 126884695634066, "name": "Grow a Garden",
+      "controls": { "plant": "mouse1", "harvest": "e", "slot_1": "1", "slot_2": "2", "slot_3": "3" },
+      "mastery": { "endless": true, "repeatEveryMinutes": 480, "repeatReward": { "ammo": 300, "xp": 450 } },
+      "achievements": [
+        { "id": "gag.welcome", "name": "Welcome to the Garden", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "gag.carrot", "name": "Carrot Cultivator", "minutes": 60, "reward": { "ammo": 120, "xp": 150 } },
+        { "id": "gag.blueberry", "name": "Blueberry Bush Keeper", "minutes": 300, "reward": { "ammo": 250, "xp": 300 } },
+        { "id": "gag.watermelon", "name": "Watermelon Grower", "minutes": 900, "reward": { "ammo": 450, "xp": 600, "frame": "frame.vine" } },
+        { "id": "gag.dragonfruit", "name": "Dragon Fruit Farmer", "minutes": 2400, "reward": { "ammo": 800, "xp": 1100, "theme": "theme.sprout" } },
+        { "id": "gag.candy", "name": "Candy Blossom Collector", "minutes": 6000, "reward": { "ammo": 1400, "xp": 2000, "title": "Green Thumb" } },
+        { "id": "gag.legend", "name": "Master Gardener", "minutes": 12000, "reward": { "ammo": 2500, "xp": 4000, "title": "Master Gardener" } }
+      ]
+    },
+    {
+      "id": "sols", "placeId": 15532962292, "name": "Sol's RNG",
+      "controls": { "roll": "mouse1", "use_item": "mouse1" },
+      "mastery": { "endless": true, "repeatEveryMinutes": 720, "repeatReward": { "ammo": 400, "xp": 600 } },
+      "achievements": [
+        { "id": "sols.first", "name": "First Roll", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "sols.streak", "name": "Lucky Streak", "minutes": 60, "reward": { "ammo": 120, "xp": 150 } },
+        { "id": "sols.biome", "name": "Biome Watcher", "minutes": 300, "reward": { "ammo": 250, "xp": 300 } },
+        { "id": "sols.hunter", "name": "Aura Hunter", "minutes": 1200, "reward": { "ammo": 500, "xp": 700, "frame": "frame.halo" } },
+        { "id": "sols.glitch", "name": "Glitch Seeker", "minutes": 4800, "reward": { "ammo": 1100, "xp": 1600, "theme": "theme.aura" } },
+        { "id": "sols.fate", "name": "Fate Weaver", "minutes": 12000, "reward": { "ammo": 2500, "xp": 4000, "title": "Fate Weaver" } }
+      ]
+    },
+    {
+      "id": "ps99", "placeId": 8737899170, "name": "Pet Simulator 99",
+      "controls": { "auto_farm_toggle": "mouse1", "use_item": "mouse1" },
+      "mastery": { "endless": false },
+      "achievements": [
+        { "id": "ps99.welcome", "name": "Welcome to PS99", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "ps99.breakables", "name": "Breakable Smasher", "minutes": 60, "reward": { "ammo": 120, "xp": 150 } },
+        { "id": "ps99.zones", "name": "Zone Climber", "minutes": 480, "reward": { "ammo": 350, "xp": 450 } },
+        { "id": "ps99.rebirth", "name": "Rebirth Ready", "minutes": 1800, "reward": { "ammo": 700, "xp": 900, "frame": "frame.paw" } },
+        { "id": "ps99.huge", "name": "Huge Hunter", "minutes": 6000, "reward": { "ammo": 1500, "xp": 2200, "title": "Huge Hunter" } }
+      ]
+    },
+    {
+      "id": "bloxfruits", "placeId": 2753915549, "name": "Blox Fruits",
+      "controls": { "melee": "1", "fruit": "2", "sword": "3", "gun": "4", "skill_z": "z", "skill_x": "x", "skill_c": "c", "skill_v": "v", "skill_f": "f", "dash": "q", "geppo": "space" },
+      "mastery": { "endless": false },
+      "achievements": [
+        { "id": "bf.choose", "name": "Pirate or Marine", "minutes": 0, "reward": { "ammo": 50, "xp": 50 } },
+        { "id": "bf.first", "name": "First Sea Sailor", "minutes": 120, "reward": { "ammo": 180, "xp": 220 } },
+        { "id": "bf.second", "name": "Second Sea Voyager", "minutes": 900, "reward": { "ammo": 500, "xp": 650, "frame": "frame.compass" } },
+        { "id": "bf.third", "name": "Third Sea Conqueror", "minutes": 3600, "reward": { "ammo": 1100, "xp": 1600 } },
+        { "id": "bf.max", "name": "Max Level Legend", "minutes": 9000, "reward": { "ammo": 2400, "xp": 3600, "title": "Max Level Legend" } }
+      ]
+    }
+  ],
+  "generalAchievements": [
+    { "id": "luger.first_launch", "name": "Loaded", "desc": "Open Luger for the first time", "reward": { "ammo": 100, "xp": 50 } },
+    { "id": "luger.first_macro", "name": "First Round", "desc": "Add your first macro", "reward": { "ammo": 150, "xp": 100 } },
+    { "id": "luger.ten_macros", "name": "Full Magazine", "desc": "Add 10 macros", "reward": { "ammo": 500, "xp": 400, "theme": "theme.oxide" } },
+    { "id": "luger.first_publish", "name": "Shared Stash", "desc": "Publish a macro to Explore", "reward": { "ammo": 300, "xp": 250 } },
+    { "id": "luger.first_review", "name": "Word of Mouth", "desc": "Receive your first review", "reward": { "ammo": 200, "xp": 150 } },
+    { "id": "luger.ten_reviews", "name": "Well Reviewed", "desc": "Receive 10 reviews", "reward": { "ammo": 600, "xp": 500, "frame": "frame.laurel" } },
+    { "id": "luger.hours_10", "name": "Regular", "desc": "Spend 10 hours with Luger", "reward": { "ammo": 300, "xp": 300 } },
+    { "id": "luger.hours_100", "name": "Old Hand", "desc": "Spend 100 hours with Luger", "reward": { "ammo": 1500, "xp": 1500, "theme": "theme.ember", "title": "Old Hand" } },
+    { "id": "luger.hours_500", "name": "Lifer", "desc": "Spend 500 hours with Luger", "reward": { "ammo": 5000, "xp": 6000, "title": "Lifer" } }
+  ],
+  "themes": [
+    { "id": "theme.brass", "name": "Brass", "free": true,
+      "tokens": { "bg": "#15171c", "surface": "#1d2027", "surface2": "#262a33", "line": "#323844", "text": "#ede6d3", "muted": "#9b968a", "accent": "#e8b53a", "accentInk": "#1a1407" } },
+    { "id": "theme.nightwatch", "name": "Night Watch", "free": true,
+      "tokens": { "bg": "#0f1420", "surface": "#161d2c", "surface2": "#1f2839", "line": "#2b364b", "text": "#e3e9f4", "muted": "#8a95aa", "accent": "#7fa7e8", "accentInk": "#0b1424" } },
+    { "id": "theme.chalk", "name": "Chalk", "free": true,
+      "tokens": { "bg": "#e9ebee", "surface": "#f6f7f9", "surface2": "#dfe2e7", "line": "#c9ced6", "text": "#1d2129", "muted": "#5e6573", "accent": "#a8740f", "accentInk": "#ffffff" } },
+    { "id": "theme.oxide", "name": "Oxide", "unlock": "luger.ten_macros",
+      "tokens": { "bg": "#121a18", "surface": "#18231f", "surface2": "#20302a", "line": "#2c3f38", "text": "#e2ece6", "muted": "#8ea39a", "accent": "#5fbf9f", "accentInk": "#07140f" } },
+    { "id": "theme.ember", "name": "Ember", "unlock": "luger.hours_100", "price": 600,
+      "tokens": { "bg": "#1a1312", "surface": "#231918", "surface2": "#2e2120", "line": "#3d2b29", "text": "#f2e4df", "muted": "#a8918b", "accent": "#f0703c", "accentInk": "#1e0a03" } },
+    { "id": "theme.abyss", "name": "Abyss", "unlock": "fisch.desolate", "price": 500,
+      "tokens": { "bg": "#0b1618", "surface": "#102024", "surface2": "#162b30", "line": "#1f3a40", "text": "#dcefef", "muted": "#7fa2a4", "accent": "#3fc7c2", "accentInk": "#03100f" } },
+    { "id": "theme.honeycomb", "name": "Honeycomb", "unlock": "bss.coconut", "price": 500,
+      "tokens": { "bg": "#17140c", "surface": "#201b10", "surface2": "#2b2415", "line": "#3a311d", "text": "#f5ead0", "muted": "#a89a78", "accent": "#f5b821", "accentInk": "#1c1402" } },
+    { "id": "theme.sprout", "name": "Sprout", "unlock": "gag.dragonfruit", "price": 500,
+      "tokens": { "bg": "#121811", "surface": "#192217", "surface2": "#212d1f", "line": "#2d3c2a", "text": "#e6efdf", "muted": "#93a389", "accent": "#8fd14f", "accentInk": "#0c1505" } },
+    { "id": "theme.aura", "name": "Aura", "unlock": "sols.glitch", "price": 700,
+      "tokens": { "bg": "#141220", "surface": "#1b182b", "surface2": "#252138", "line": "#332e4b", "text": "#ebe6fa", "muted": "#9a93b5", "accent": "#b48cff", "accentInk": "#120a24" } },
+    { "id": "theme.gilded", "name": "Gilded", "price": 900,
+      "tokens": { "bg": "#1b1710", "surface": "#251f15", "surface2": "#30281b", "line": "#433824", "text": "#fbf1d8", "muted": "#b3a37f", "accent": "#ffd45e", "accentInk": "#1f1603" } },
+    { "id": "theme.steel", "name": "Steel", "price": 300,
+      "tokens": { "bg": "#17191b", "surface": "#1f2225", "surface2": "#292d31", "line": "#363b41", "text": "#e9ecef", "muted": "#979ea6", "accent": "#c9d1da", "accentInk": "#15181b" } }
+  ],
+  "items": [
+    { "id": "frame.brass", "kind": "frame", "name": "Brass Ring", "price": 150 },
+    { "id": "frame.bandolier", "kind": "frame", "name": "Bandolier", "price": 450 },
+    { "id": "frame.laurel", "kind": "frame", "name": "Laurel", "unlock": "luger.ten_reviews" },
+    { "id": "frame.hook", "kind": "frame", "name": "Hook & Line", "unlock": "fisch.roslit", "price": 350 },
+    { "id": "frame.comb", "kind": "frame", "name": "Comb", "unlock": "bss.pine", "price": 350 },
+    { "id": "frame.vine", "kind": "frame", "name": "Vine", "unlock": "gag.watermelon", "price": 350 },
+    { "id": "frame.halo", "kind": "frame", "name": "Halo", "unlock": "sols.hunter", "price": 400 },
+    { "id": "frame.paw", "kind": "frame", "name": "Paw Print", "unlock": "ps99.rebirth", "price": 350 },
+    { "id": "frame.compass", "kind": "frame", "name": "Compass", "unlock": "bf.second", "price": 350 },
+    { "id": "effect.sparks", "kind": "effect", "name": "Sparks", "price": 250 },
+    { "id": "effect.embers", "kind": "effect", "name": "Embers", "price": 400 },
+    { "id": "effect.snow", "kind": "effect", "name": "Snowfall", "price": 300 },
+    { "id": "effect.bubbles", "kind": "effect", "name": "Bubbles", "price": 300 },
+    { "id": "effect.shimmer", "kind": "effect", "name": "Gold Shimmer", "price": 1000 },
+    { "id": "banner.range", "kind": "banner", "name": "Firing Range", "price": 100 },
+    { "id": "banner.dusk", "kind": "banner", "name": "Dusk", "price": 100 },
+    { "id": "banner.tide", "kind": "banner", "name": "Tide", "price": 150 },
+    { "id": "banner.meadow", "kind": "banner", "name": "Meadow", "price": 150 },
+    { "id": "banner.static", "kind": "banner", "name": "Static", "price": 200 },
+    { "id": "title.marksman", "kind": "title", "name": "Marksman", "price": 200 },
+    { "id": "title.quartermaster", "kind": "title", "name": "Quartermaster", "price": 350 },
+    { "id": "title.clockwork", "kind": "title", "name": "Clockwork", "price": 250 }
+  ],
+  "ammoPerCrystal": 25,
+  "crystalPacks": [
+    { "id": "crystals.50", "crystals": 50, "gbp": 0.49 },
+    { "id": "crystals.100", "crystals": 100, "gbp": 0.99 },
+    { "id": "crystals.220", "crystals": 220, "gbp": 1.99 },
+    { "id": "crystals.600", "crystals": 600, "gbp": 4.99 },
+    { "id": "crystals.1300", "crystals": 1300, "gbp": 9.99 }
+  ],
+  "keyProducts": [
+    { "id": "key.weekly", "name": "Weekly", "gbp": 4.99, "kind": "weekly", "days": 7, "recurring": "week" },
+    { "id": "key.monthly", "name": "Monthly", "gbp": 9.99, "kind": "monthly", "days": 30, "recurring": "month" },
+    { "id": "key.lifetime", "name": "Lifetime", "gbp": 19.99, "kind": "lifetime" }
+  ],
+  "levels": { "xpBase": 500, "xpGrowth": 1.18 },
+  "fflags": [
+    { "id": "fps", "label": "Frame rate cap", "help": "Higher than 60 needs a monitor that can show it.", "type": "number", "flag": "DFIntTaskSchedulerTargetFps", "min": 30, "max": 360, "default": 60 },
+    { "id": "msaa", "label": "Anti-aliasing samples", "type": "select", "flag": "FIntDebugForceMSAASamples", "options": [["Automatic", null], ["Off", 0], ["1x", 1], ["2x", 2], ["4x", 4], ["8x", 8]] },
+    { "id": "textures", "label": "Texture quality", "type": "select", "flag": "DFIntTextureQualityOverride", "enable": "DFFlagTextureQualityOverrideEnabled", "options": [["Automatic", null], ["Lowest", 0], ["Low", 1], ["Medium", 2], ["High", 3]] },
+    { "id": "grass", "label": "Reduce grass motion", "type": "toggle", "flag": "FIntGrassMovementReducedMotionFactor", "on": 0 },
+    { "id": "altenter", "label": "Alt+Enter toggles fullscreen", "type": "toggle", "flag": "FFlagHandleAltEnterFullscreenManually", "on": false, "platform": "win32" }
+  ]
+}

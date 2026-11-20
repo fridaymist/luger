@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thanks · Luger</title>
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css">
+</head>
+<body><div class="wrap">
+<header class="site"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></header>
+<h1>Payment received</h1>
+<p class="lead" id="msg">Getting your purchase ready.</p>
+<section id="keybox" hidden>
+  <p>Luger is applying your key now. Keep a copy somewhere safe:</p>
+  <div class="key" id="key"></div>
+  <button class="btn" id="copy">Copy key</button>
+</section>
+<p class="err" id="err" role="alert"></p>
+</div>
+<script src="/config.js"></script><script src="/site.js"></script>
+<script>
+const sid = new URLSearchParams(location.search).get('session_id')
+let tries = 0
+async function poll() {
+  try {
+    const r = await call('checkpoint', { action: 'purchase', sessionId: sid })
+    if (r.pending) {
+      if (++tries < 20) return setTimeout(poll, 2000)
+      $('#msg').textContent = 'Your payment went through. Delivery is taking longer than usual; Luger will pick it up automatically.'
+      return
+    }
+    if (r.key) { $('#key').textContent = r.key; show($('#keybox'), true); $('#msg').textContent = 'Thank you for supporting Luger.' }
+    else $('#msg').textContent = r.product?.startsWith('crystals') ? 'Your crystals are in your Luger balance.' : 'Your key is already active in Luger. You can close this page.'
+  } catch (e) { $('#err').textContent = e.message }
+}
+$('#copy').onclick = () => copy($('#key').textContent, $('#copy'))
+sid ? poll() : ($('#msg').textContent = 'No purchase found on this link.')
+</script>
+</body></html>

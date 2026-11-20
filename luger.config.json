@@ -1,0 +1,9 @@
+{
+  "functions": "https://bvrvmpvihtyrqofzdheb.supabase.co/functions/v1",
+  "publicKey": {
+    "crv": "Ed25519",
+    "x": "ozX4ZgBBH0ok0i98d1G_dTG3FeAPYgdz0jos8SHxWAM",
+    "kty": "OKP"
+  },
+  "site": "https://lugerhub.fun"
+}
