@@ -143,7 +143,11 @@
   new IntersectionObserver(([e], o) => {
     if (!e.isIntersecting) return
     o.disconnect()
-    call('site.stats').then((s) => $$('[data-count]').forEach((el) => countUp(el, Number(s[el.dataset.count]) || 0)))
+    call('site.stats').then((s) => {
+      // Numbers only appear once there is a real community to show.
+      if ((s.players || 0) < 25) { statsEl.style.display = 'none'; return }
+      $$('[data-count]').forEach((el) => countUp(el, Number(s[el.dataset.count]) || 0))
+    })
       .catch(() => { statsEl.style.display = 'none' })
   }, { threshold: 0.4 }).observe(statsEl)
 
