@@ -96,9 +96,9 @@ function localPrice(gbp: number, currency: string, r: Record<string, number>): {
   const raw = gbp * rate
   // Round to a natural-looking price in that currency (x.49 / x.99 style where it fits).
   if (ZERO_DECIMAL.has(currency)) return { amount: Math.max(1, Math.round(raw / 10) * 10 - (raw > 100 ? 1 : 0)), currency }
+  // Round up to the next .49 or .99 so the estimate is never lower than the real charge.
   const whole = Math.floor(raw)
-  const frac = raw - whole
-  const amount = frac < 0.25 ? Math.max(0.49, whole - 0.01) : frac < 0.75 ? whole + 0.49 : whole + 0.99
+  const amount = [whole + 0.49, whole + 0.99, whole + 1.49].find((x) => x >= raw - 0.005)!
   return { amount: Math.round(amount * 100) / 100, currency }
 }
 
