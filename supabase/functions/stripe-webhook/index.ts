@@ -15,7 +15,7 @@ async function ensureUser(rid: number): Promise<void> {
   await db.from('users').insert({ roblox_id: rid, username: u?.name ?? String(rid), display_name: u?.displayName ?? null })
 }
 
-async function onCheckoutCompleted(session: any): Promise<void> {
+async function onCheckoutCompleted(session: any, livemode: boolean): Promise<void> {
   if (session.payment_status !== 'paid' && session.payment_status !== 'no_payment_required') return
   const meta = session.metadata ?? {}
   const rid = Number(meta.roblox_id) || null
@@ -26,6 +26,7 @@ async function onCheckoutCompleted(session: any): Promise<void> {
     amount: session.amount_total,
     currency: session.currency,
     status: 'paid',
+    livemode,
     device_id: meta.device || null,
     stripe_session: session.id,
     customer: session.customer ?? null
@@ -66,7 +67,7 @@ async function onCheckoutCompleted(session: any): Promise<void> {
   }
 }
 
-async function onInvoicePaid(invoice: any): Promise<void> {
+async function onInvoicePaid(invoice: any, livemode: boolean): Promise<void> {
   // The first invoice is covered by checkout.session.completed; extend on renewals.
   // Newer Stripe API versions moved the subscription id under parent.subscription_details.
   const subId = invoice.subscription ?? invoice.parent?.subscription_details?.subscription
@@ -77,7 +78,7 @@ async function onInvoicePaid(invoice: any): Promise<void> {
   const target = periodEnd ? periodEnd * 1000 + GRACE_S * 1000 : Date.now() + 8 * 86400 * 1000
   const current = key.expires_at ? Date.parse(key.expires_at) : 0
   await db.from('keys').update({ expires_at: new Date(Math.max(current, target)).toISOString(), revoked: false }).eq('id', key.id)
-  await db.from('orders').upsert({ id: invoice.id, product: 'renewal', amount: invoice.amount_paid, currency: invoice.currency, status: 'paid', key_id: key.id })
+  await db.from('orders').upsert({ id: invoice.id, product: 'renewal', amount: invoice.amount_paid, currency: invoice.currency, status: 'paid', livemode, key_id: key.id })
 }
 
 async function onSubscriptionEnded(sub: any): Promise<void> {
@@ -137,10 +138,10 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case 'checkout.session.completed':
       case 'checkout.session.async_payment_succeeded':
-        await onCheckoutCompleted(obj)
+        await onCheckoutCompleted(obj, !!event.livemode)
         break
       case 'invoice.paid':
-        await onInvoicePaid(obj)
+        await onInvoicePaid(obj, !!event.livemode)
         break
       case 'customer.subscription.deleted':
         await onSubscriptionEnded(obj)

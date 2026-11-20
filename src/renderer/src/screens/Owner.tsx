@@ -46,9 +46,13 @@ function Overview() {
   return (
     <>
       <div className="statgrid">{cards.map(([label, n]) => <div key={label as string} className="stat card"><b className="num">{Number(n).toLocaleString()}</b><span className="muted small">{label}</span></div>)}</div>
-      <h2 className="section">Revenue this week <span className="muted">before payment fees</span></h2>
-      <div className="row" style={{ gap: 18, flexWrap: 'wrap' }}>
-        {Object.keys(d.revenueWeek).length ? Object.entries(d.revenueWeek).map(([c, v]) => <b key={c} className="num" style={{ font: '700 26px var(--display)' }}>{money(v as number, c.toUpperCase())}</b>) : <span className="muted">No sales yet.</span>}
+      <h2 className="section">Revenue <span className="muted">real payments only, before VAT and Stripe fees; test purchases are left out</span></h2>
+      <div className="row" style={{ gap: 40, flexWrap: 'wrap' }}>
+        {[['This week', d.revenueWeek], ['All time', d.revenueTotal ?? {}]].map(([label, r]: any) => (
+          <div key={label}><span className="muted small">{label}</span>
+            <div className="row" style={{ gap: 14 }}>{Object.keys(r).length ? Object.entries(r).map(([c, v]) => <b key={c} className="num" style={{ font: '700 26px var(--display)' }}>{money(v as number, c.toUpperCase())}</b>) : <b className="num" style={{ font: '700 26px var(--display)' }}>{money(0, 'GBP')}</b>}</div>
+          </div>
+        ))}
       </div>
     </>
   )

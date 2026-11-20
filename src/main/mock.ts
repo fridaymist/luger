@@ -171,7 +171,7 @@ export async function mockCall(action: string, body: any, token: string | null):
     case 'admin.settings.get':
       return { settings: { checkpoint: { steps: 2, ad_key_hours: 24, ad_key_devices: 1, min_seconds: 12, providers: ['lootlabs', 'linkvertise', 'workink'] }, fflags: [] } }
     case 'admin.stats':
-      return { keys: db.keys.length, adKeysDay: 14, redeemsDay: 31, users: 120, macros: 48, held: 0, reportsOpen: 0, ordersWeek: 6, revenueWeek: { gbp: 54.94 } }
+      return { keys: db.keys.length, adKeysDay: 14, redeemsDay: 31, users: 120, macros: 48, held: 0, reportsOpen: 0, ordersWeek: 0, revenueWeek: {}, revenueTotal: {} }
     case 'admin.official.list':
       return { macros: [{ id: 'off-1', name: 'Fisch auto cast', description: 'Holds and releases cast on F1.', universe_id: games[0].universe_id, tags: ['fishing'], version: 2, allow_remove: false, public: false, installs: 0, updated_at: new Date().toISOString(), author: { username: db.user.username, roles: db.user.roles } }] }
     case 'admin.official.setRemovable':

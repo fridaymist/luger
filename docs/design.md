@@ -139,9 +139,9 @@ Format: `LUGER-XXXX-XXXX-XXXX-XXXX` (Crockford base32, which leaves out look-ali
 
 | Product | Base price | Key |
 |---|---|---|
-| Weekly | £4.99 | 7 days, renews automatically while subscribed |
-| Monthly | £9.99 | 30 days, renews automatically while subscribed |
-| Lifetime | £19.99 | One-off payment, never expires |
+| Weekly | £5.99 | 7 days, renews automatically while subscribed |
+| Monthly | £11.99 | 30 days, renews automatically while subscribed |
+| Lifetime | £23.99 | One-off payment, never expires |
 
 **How a purchase works:**
 1. The user clicks **Buy** in the app, and checkout opens in their own currency. The payment service converts the price; the owner sets one price in pounds.
@@ -309,11 +309,11 @@ All apps take on the current theme, including custom backgrounds. None of them c
 
   | Crystals | Price |
   |---|---|
-  | 50 | £0.49 |
-  | 100 | £0.99 |
-  | 220 | £1.99 (+10%) |
-  | 600 | £4.99 (+20%) |
-  | 1,300 | £9.99 (+30%) |
+  | 50 | £0.59 |
+  | 100 | £1.19 |
+  | 220 | £2.39 (+10%) |
+  | 600 | £5.99 (+20%) |
+  | 1,300 | £11.99 (+30%) |
 
   - Item prices range from 50 to 1,000 crystals.
   - Ammo prices are **25× the crystal price**. They're worth the same, but ammo is earned slowly through play and achievements, roughly 1 crystal-equivalent per 10–15 minutes of active use.

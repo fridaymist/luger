@@ -849,11 +849,14 @@ const PRIVATE: Record<string, Action> = {
       count(db.from('macros').select('id', { count: 'exact', head: true }).eq('status', 'live').eq('public', true)),
       count(db.from('macros').select('id', { count: 'exact', head: true }).eq('status', 'held')),
       count(db.from('reports').select('id', { count: 'exact', head: true }).eq('resolved', false)),
-      db.from('orders').select('amount, currency, product').eq('status', 'paid').gte('created_at', week)
+      db.from('orders').select('amount, currency, product').eq('status', 'paid').eq('livemode', true).gte('created_at', week)
     ])
+    const { data: allPaid } = await db.from('orders').select('amount, currency').eq('status', 'paid').eq('livemode', true)
+    const revenueTotal: Record<string, number> = {}
+    for (const o of allPaid ?? []) revenueTotal[o.currency ?? 'gbp'] = (revenueTotal[o.currency ?? 'gbp'] ?? 0) + (o.amount ?? 0) / 100
     const revenue: Record<string, number> = {}
     for (const o of ordersWeek.data ?? []) revenue[o.currency ?? 'gbp'] = (revenue[o.currency ?? 'gbp'] ?? 0) + (o.amount ?? 0) / 100
-    return { keys, adKeysDay, redeemsDay, users, macros, held, reportsOpen, ordersWeek: (ordersWeek.data ?? []).length, revenueWeek: revenue }
+    return { keys, adKeysDay, redeemsDay, users, macros, held, reportsOpen, ordersWeek: (ordersWeek.data ?? []).length, revenueWeek: revenue, revenueTotal }
   },
 
   async 'admin.discord.stats'({ s }) {

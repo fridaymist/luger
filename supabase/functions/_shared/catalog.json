@@ -150,16 +150,16 @@
   ],
   "ammoPerCrystal": 25,
   "crystalPacks": [
-    { "id": "crystals.50", "crystals": 50, "gbp": 0.49 },
-    { "id": "crystals.100", "crystals": 100, "gbp": 0.99 },
-    { "id": "crystals.220", "crystals": 220, "gbp": 1.99 },
-    { "id": "crystals.600", "crystals": 600, "gbp": 4.99 },
-    { "id": "crystals.1300", "crystals": 1300, "gbp": 9.99 }
+    { "id": "crystals.50", "crystals": 50, "gbp": 0.59 },
+    { "id": "crystals.100", "crystals": 100, "gbp": 1.19 },
+    { "id": "crystals.220", "crystals": 220, "gbp": 2.39 },
+    { "id": "crystals.600", "crystals": 600, "gbp": 5.99 },
+    { "id": "crystals.1300", "crystals": 1300, "gbp": 11.99 }
   ],
   "keyProducts": [
-    { "id": "key.weekly", "name": "Weekly", "gbp": 4.99, "kind": "weekly", "days": 7, "recurring": "week" },
-    { "id": "key.monthly", "name": "Monthly", "gbp": 9.99, "kind": "monthly", "days": 30, "recurring": "month" },
-    { "id": "key.lifetime", "name": "Lifetime", "gbp": 19.99, "kind": "lifetime" }
+    { "id": "key.weekly", "name": "Weekly", "gbp": 5.99, "kind": "weekly", "days": 7, "recurring": "week" },
+    { "id": "key.monthly", "name": "Monthly", "gbp": 11.99, "kind": "monthly", "days": 30, "recurring": "month" },
+    { "id": "key.lifetime", "name": "Lifetime", "gbp": 23.99, "kind": "lifetime" }
   ],
   "levels": { "xpBase": 500, "xpGrowth": 1.18 },
   "fflags": [

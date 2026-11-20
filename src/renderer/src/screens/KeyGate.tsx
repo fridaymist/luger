@@ -77,7 +77,7 @@ export default function KeyGate() {
         <div className="spread"><h2 className="gate-h">Skip the ads</h2><span className="muted small">{prices?.keys?.[0]?.local?.currency && prices.keys[0].local.currency !== 'GBP' ? 'Prices in your currency' : 'Charged in your currency'}</span></div>
         <div className="plans">
           {(prices?.keys ?? [
-            { id: 'key.weekly', name: 'Weekly', gbp: 4.99 }, { id: 'key.monthly', name: 'Monthly', gbp: 9.99 }, { id: 'key.lifetime', name: 'Lifetime', gbp: 19.99 }
+            { id: 'key.weekly', name: 'Weekly', gbp: 5.99 }, { id: 'key.monthly', name: 'Monthly', gbp: 11.99 }, { id: 'key.lifetime', name: 'Lifetime', gbp: 23.99 }
           ]).map((p: any) => (
             <button key={p.id} className={`plan${p.id === 'key.lifetime' ? ' best' : ''}`} onClick={() => buy(p.id)} disabled={!!busy}>
               <span className="muted small">{p.name}</span>

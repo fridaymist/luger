@@ -1,7 +1,7 @@
 {
   "name": "luger",
   "productName": "Luger",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Macro hub, launcher and automation tools for Roblox games that allow macros.",
   "main": "./out/main/index.js",
   "author": {

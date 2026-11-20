@@ -64,8 +64,8 @@ npx supabase db push
    registering if sales grow. If your Stripe account offers **Managed Payments**, it
    handles tax for you.
 
-Prices are already set in the app: £4.99 a week, £9.99 a month, £19.99 lifetime, and
-crystal packs from £0.49. You do not create products in Stripe.
+Prices are already set in the app: £5.99 a week, £11.99 a month, £23.99 lifetime, and
+crystal packs from £0.59. Prices include VAT. You do not create products in Stripe.
 
 ## 4. Ad networks (free keys), with your parent
 
