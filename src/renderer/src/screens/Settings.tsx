@@ -174,6 +174,7 @@ function Account() {
         Your key: {exp ? `${duration(Math.max(0, Math.round((left ?? 0) / 1000 / 3600)) * 3600)} left` : 'lifetime'}
       </Line>
       {me?.verified && <Line control={<button className="btn sm" disabled={!!busy} onClick={() => run('restore', async () => { await invoke('session:restorePurchases'); toast('Purchases restored.') })}>Restore</button>} hint="Moves a key you bought onto this computer.">Bought a key on another computer?</Line>}
+      <Line control={<button className="btn sm" disabled={!!busy} onClick={() => run('portal', () => invoke('billing:portal'))}>Manage</button>} hint="Cancel a weekly or monthly key, change your card, or download receipts.">Your subscription and receipts</Line>
       <div className="sline col">
         <div className="sline-text">Get or extend a key</div>
         <div className="plans" style={{ marginTop: 10 }}>

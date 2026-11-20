@@ -75,6 +75,8 @@ export async function mockCall(action: string, body: any, token: string | null):
       return { url: 'https://lugerhub.fun/thanks', id: 'cs_test_offline' }
     case 'checkout.claim':
       return { keys: [] }
+    case 'billing.portal':
+      throw new Error('No purchases found for this account or computer.')
     case 'discord.linkToken':
       return { url: 'https://lugerhub.fun/verify/' }
     case 'discord.status':

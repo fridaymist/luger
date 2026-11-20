@@ -27,7 +27,12 @@ async function onCheckoutCompleted(session: any): Promise<void> {
     currency: session.currency,
     status: 'paid',
     device_id: meta.device || null,
-    stripe_session: session.id
+    stripe_session: session.id,
+    customer: session.customer ?? null
+  }
+  if (rid && session.customer) {
+    await ensureUser(rid)
+    await db.from('users').update({ stripe_customer: session.customer }).eq('roblox_id', rid)
   }
 
   if (meta.kind === 'crystals') {

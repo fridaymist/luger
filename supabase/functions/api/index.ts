@@ -7,7 +7,7 @@ import { moderate } from '../_shared/moderation.ts'
 import { award, levelFor } from '../_shared/progress.ts'
 import * as roblox from '../_shared/roblox.ts'
 import { looksLikeAhk, scanPython } from '../_shared/scan.ts'
-import { createCheckout } from '../_shared/stripe.ts'
+import { createCheckout, portalUrl } from '../_shared/stripe.ts'
 import {
   clientIp, db, getSetting, handle, HttpError, int, limit, liveProviders, randomToken, readSession, requireRole, requireSession, requireVerified,
   type Session, str, unseal
@@ -304,6 +304,21 @@ const PRIVATE: Record<string, Action> = {
     return sessionFor(best.id, s!.sub, rid)
   },
 
+  async 'billing.portal'({ s }) {
+    await limit(`portal:${s!.sub}`, 10, 3600)
+    let customer: string | null = null
+    if (s!.rid && s!.ver) {
+      const { data } = await db.from('users').select('stripe_customer').eq('roblox_id', s!.rid).maybeSingle()
+      customer = data?.stripe_customer ?? null
+    }
+    if (!customer) {
+      const { data } = await db.from('orders').select('customer').eq('device_id', s!.sub).not('customer', 'is', null).order('created_at', { ascending: false }).limit(1).maybeSingle()
+      customer = data?.customer ?? null
+    }
+    if (!customer) throw new HttpError(404, 'No purchases found for this account or computer.')
+    return { url: await portalUrl(customer) }
+  },
+
   async 'discord.linkToken'({ s }) {
     const rid = requireVerified(s!)
     await limit(`dlink:${rid}`, 10, 3600)
@@ -587,7 +602,8 @@ const PRIVATE: Record<string, Action> = {
     const pack = catalog.crystalPacks.find((p) => p.id === body.pack)
     if (!pack) throw new HttpError(400, 'Unknown crystal pack.')
     await limit(`checkout:${s!.sub}`, 10, 3600)
-    return createCheckout({ name: `${pack.crystals} Luger crystals`, gbp: pack.gbp }, { kind: 'crystals', product: pack.id, device: s!.sub, roblox_id: String(rid) }, body.locale)
+    const { data: u } = await db.from('users').select('stripe_customer').eq('roblox_id', rid).maybeSingle()
+    return createCheckout({ name: `${pack.crystals} Luger crystals`, gbp: pack.gbp }, { kind: 'crystals', product: pack.id, device: s!.sub, roblox_id: String(rid) }, body.locale, u?.stripe_customer ?? null)
   },
 
   // -------------------------------------------------------------- owner and staff

@@ -38,9 +38,10 @@ export interface CheckoutItem {
   recurring?: 'week' | 'month'
 }
 
-export async function createCheckout(item: CheckoutItem, metadata: Record<string, string>, locale?: string): Promise<{ url: string; id: string }> {
+export async function createCheckout(item: CheckoutItem, metadata: Record<string, string>, locale?: string, customer?: string | null): Promise<{ url: string; id: string }> {
   const site = Deno.env.get('LUGER_SITE_URL') ?? 'https://lugerhub.fun'
   const params: Record<string, unknown> = {
+    customer: customer ?? undefined,
     mode: item.recurring ? 'subscription' : 'payment',
     line_items: [{
       quantity: 1,
@@ -58,6 +59,7 @@ export async function createCheckout(item: CheckoutItem, metadata: Record<string
     metadata,
     subscription_data: item.recurring ? { metadata } : undefined,
     payment_intent_data: item.recurring ? undefined : { metadata },
+    customer_creation: item.recurring || customer ? undefined : 'always',
     success_url: `${site}/thanks?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${site}/cancelled`
   }
@@ -82,4 +84,11 @@ export async function verifyWebhook(raw: string, header: string | null): Promise
   const expected = await hmac(secret, `${t}.${raw}`)
   if (!sigs.some((s) => safeEqual(s, expected))) throw new HttpError(400, 'Bad signature')
   return JSON.parse(raw)
+}
+
+/** A Stripe-hosted page where buyers cancel subscriptions and see receipts. */
+export async function portalUrl(customer: string): Promise<string> {
+  const site = Deno.env.get('LUGER_SITE_URL') ?? 'https://lugerhub.fun'
+  const session = await stripe('/billing_portal/sessions', { customer, return_url: `${site}/` })
+  return session.url
 }

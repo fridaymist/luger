@@ -307,6 +307,11 @@ const handlers: Record<string, Handler> = {
     locale: app.getLocale()
   }),
   'app:open': (url: string) => openSafe(url),
+  'billing:portal': async () => {
+    const r = await api.call('billing.portal')
+    openSafe(r.url)
+    return true
+  },
   'discord:verify': async () => {
     const r = await api.call('discord.linkToken')
     openSafe(r.url)
