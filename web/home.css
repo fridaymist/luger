@@ -167,3 +167,6 @@ body > :not(.spot):not(.progress):not(.nav) { position: relative; z-index: 1; }
 .foot-links a { color: var(--muted); font-weight: 600; font-size: 14.5px; }
 .foot-links a:hover { color: var(--text); }
 .fine { font-size: 13px; margin: 22px 0 0; }
+
+.price .buy { margin-top: 18px; width: 100%; }
+.price .buy[aria-busy='true'] { opacity: .6; pointer-events: none; }

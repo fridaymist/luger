@@ -6,7 +6,7 @@
 // provider's anti-bypass value where it has one). After the last step a key is made.
 // The site also uses `purchase` to show a key after a Stripe checkout.
 import { createKeys } from '../_shared/keys.ts'
-import { db, getSetting, handle, HttpError, limit, clientIp, liveProviders, randomToken, safeEqual } from '../_shared/util.ts'
+import { db, getSetting, handle, HttpError, limit, clientIp, liveProviders, randomToken, safeEqual, unseal } from '../_shared/util.ts'
 
 const SITE = Deno.env.get('LUGER_SITE_URL') ?? 'https://lugerhub.fun'
 
@@ -62,9 +62,17 @@ Deno.serve((req) =>
     if (action === 'purchase') {
       const sid = String(body.sessionId ?? '')
       if (!/^cs_(test|live)_[A-Za-z0-9]{10,}$/.test(sid)) throw new HttpError(400, 'Invalid checkout reference.')
-      const { data } = await db.from('orders').select('id, product, key_plain_once, status').eq('stripe_session', sid).maybeSingle()
+      const { data } = await db.from('orders').select('id, product, key_plain_once, key_id, status, created_at').eq('stripe_session', sid).maybeSingle()
       if (!data) return { pending: true }
-      return { product: data.product, key: data.key_plain_once, delivered: !data.key_plain_once }
+      if (data.status === 'refunded') return { product: data.product, refunded: true }
+      // The thank-you link shows the key for 7 days; after that it is only in the app or the owner panel.
+      if (Date.now() - Date.parse(data.created_at) > 7 * 86400 * 1000) return { product: data.product, expired: true }
+      let key = data.key_plain_once
+      if (!key && data.key_id) {
+        const { data: k } = await db.from('keys').select('key_sealed').eq('id', data.key_id).maybeSingle()
+        if (k?.key_sealed) key = await unseal(k.key_sealed)
+      }
+      return { product: data.product, key, delivered: !data.key_plain_once }
     }
 
     const sid = String(body.session ?? '')

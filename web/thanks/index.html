@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Thanks · Luger</title>
-<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css?v=1795203508">
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css?v=1795209621">
 </head>
 <body><div class="glow-bg" aria-hidden="true"></div><div class="wrap">
 <header class="site"><a href="/" style="display:flex;align-items:center;gap:12px;color:inherit"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></a></header>
 <h1>Payment received</h1>
 <p class="lead" id="msg">Getting your purchase ready.</p>
-<section id="keybox" hidden>
-  <p>Luger is applying your key now. Keep a copy somewhere safe:</p>
+<section id="keybox" class="card" hidden>
+  <p style="margin-top:0"><b>Your Luger key</b><br><span class="muted">Open Luger, paste it into “Your key” and press Unlock. Keep a copy somewhere safe. This page shows it for 7 days.</span></p>
   <div class="key" id="key"></div>
-  <button class="btn" id="copy">Copy key</button>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" id="copy">Copy key</button><a class="btn" id="dl" target="_blank" rel="noopener">Download Luger</a></div>
 </section>
 <p class="err" id="err" role="alert"></p>
 </div>
-<script src="/config.js?v=1795203508"></script><script src="/site.js?v=1795203508"></script>
+<script src="/config.js?v=1795209621"></script><script src="/site.js?v=1795209621"></script>
 <script>
 const sid = new URLSearchParams(location.search).get('session_id')
 let tries = 0
@@ -28,8 +28,10 @@ async function poll() {
       $('#msg').textContent = 'Your payment went through. Delivery is taking longer than usual; Luger will pick it up automatically.'
       return
     }
-    if (r.key) { $('#key').textContent = r.key; show($('#keybox'), true); $('#msg').textContent = 'Thank you for supporting Luger.' }
-    else $('#msg').textContent = r.product?.startsWith('crystals') ? 'Your crystals are in your Luger balance.' : 'Your key is already active in Luger. You can close this page.'
+    if (r.refunded) { $('#msg').textContent = 'This purchase was refunded, so its key no longer works.'; return }
+    if (r.expired) { $('#msg').textContent = 'This page has expired. If you lost your key, open a ticket in the Luger Discord with your receipt.'; return }
+    if (r.key) { $('#key').textContent = r.key; $('#dl').href = window.LUGER.download; show($('#keybox'), true); $('#msg').textContent = 'Thank you for supporting Luger.' }
+    else $('#msg').textContent = r.product?.startsWith('crystals') ? 'Your crystals are in your Luger balance.' : 'Your key is active in Luger. You can close this page.'
   } catch (e) { $('#err').textContent = e.message }
 }
 $('#copy').onclick = () => copy($('#key').textContent, $('#copy'))

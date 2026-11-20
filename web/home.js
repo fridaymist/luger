@@ -151,6 +151,22 @@
       .catch(() => { statsEl.style.display = 'none' })
   }, { threshold: 0.4 }).observe(statsEl)
 
+  // Buy on the website: Stripe checkout, then the thank-you page shows the key
+  $$('[data-buy]').forEach((b) => b.addEventListener('click', async () => {
+    const label = b.textContent
+    b.setAttribute('aria-busy', 'true')
+    b.textContent = 'Opening checkout…'
+    $('#buy-err').textContent = ''
+    try {
+      const r = await call('checkout.web', { product: b.dataset.buy, locale: navigator.language })
+      location.href = r.url
+    } catch {
+      $('#buy-err').textContent = 'Checkout could not open. Try again in a moment.'
+      b.removeAttribute('aria-busy')
+      b.textContent = label
+    }
+  }))
+
   const CUR = { GB: 'GBP', US: 'USD', CA: 'CAD', AU: 'AUD', NZ: 'NZD', IE: 'EUR', DE: 'EUR', FR: 'EUR', ES: 'EUR', IT: 'EUR', NL: 'EUR', BE: 'EUR', AT: 'EUR', PT: 'EUR', FI: 'EUR', GR: 'EUR', SE: 'SEK', NO: 'NOK', DK: 'DKK', PL: 'PLN', CZ: 'CZK', CH: 'CHF', JP: 'JPY', KR: 'KRW', IN: 'INR', BR: 'BRL', MX: 'MXN', ZA: 'ZAR', TR: 'TRY', SG: 'SGD', HK: 'HKD', PH: 'PHP', MY: 'MYR', ID: 'IDR', TH: 'THB' }
   const region = (navigator.language.split('-')[1] || '').toUpperCase()
   call('prices', { currency: CUR[region] || 'GBP' }).then((p) => {

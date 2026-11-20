@@ -143,6 +143,18 @@ const PUBLIC: Record<string, Action> = {
     )
   },
 
+  /** Buying on lugerhub.fun: no app or device needed; the key is shown on the thank-you page. */
+  async 'checkout.web'({ req, body }) {
+    await limit(`webbuy:${clientIp(req)}`, 15, 3600)
+    const product = catalog.keyProducts.find((p) => p.id === body.product)
+    if (!product) throw new HttpError(400, 'Unknown product.')
+    return createCheckout(
+      { name: `Luger ${product.name} key`, description: product.recurring ? `Renews every ${product.recurring}. Cancel any time.` : 'One payment, never expires.', gbp: product.gbp, recurring: product.recurring as 'week' | 'month' | undefined },
+      { kind: 'key', product: product.id, device: '', roblox_id: '', source: 'website' },
+      typeof body.locale === 'string' ? body.locale : undefined
+    )
+  },
+
   async 'checkout.claim'({ body }) {
     const dev = device(body)
     await limit(`claim:${dev}`, 60, 600)
