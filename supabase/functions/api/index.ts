@@ -91,7 +91,8 @@ const ZERO_DECIMAL = new Set(['JPY', 'KRW', 'VND', 'CLP', 'ISK', 'HUF', 'TWD', '
 
 function localPrice(gbp: number, currency: string, r: Record<string, number>): { amount: number; currency: string } {
   const rate = r[currency]
-  if (!rate) return { amount: gbp, currency: 'GBP' }
+  // Pounds are what checkout charges, so show them exactly; other currencies are estimates.
+  if (currency === 'GBP' || !rate) return { amount: gbp, currency: 'GBP' }
   const raw = gbp * rate
   // Round to a natural-looking price in that currency (x.49 / x.99 style where it fits).
   if (ZERO_DECIMAL.has(currency)) return { amount: Math.max(1, Math.round(raw / 10) * 10 - (raw > 100 ? 1 : 0)), currency }
