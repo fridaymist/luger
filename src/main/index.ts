@@ -307,6 +307,11 @@ const handlers: Record<string, Handler> = {
     locale: app.getLocale()
   }),
   'app:open': (url: string) => openSafe(url),
+  'discord:verify': async () => {
+    const r = await api.call('discord.linkToken')
+    openSafe(r.url)
+    return true
+  },
   'app:discord': () => openSafe((config as any).discord ?? 'https://discord.gg/zTnwbjHu4e'),
   'app:restartToUpdate': () => {
     quitting = true

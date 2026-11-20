@@ -88,6 +88,7 @@ export default function KeyGate() {
           ))}
         </div>
         <p className="muted small" style={{ margin: '10px 0 0' }}>Paid keys arrive here as soon as checkout finishes. Subscriptions can be cancelled any time.</p>
+        <p className="muted small" style={{ margin: '14px 0 0' }}>By using Luger you agree to the <button className="linkish" onClick={() => invoke('app:open', 'https://lugerhub.fun/terms/')}>Terms</button> and <button className="linkish" onClick={() => invoke('app:open', 'https://lugerhub.fun/privacy/')}>Privacy Policy</button>.</p>
       </section>
     </div>
   )

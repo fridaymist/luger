@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verifying · Luger</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css?v=1795300000">
+</head>
+<body><div class="glow-bg" aria-hidden="true"></div><div class="wrap">
+<header class="site"><a href="/" style="display:flex;align-items:center;gap:12px;color:inherit"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></a></header>
+<h1 id="title">Verifying…</h1>
+<p class="lead" id="msg">Linking your Discord to Luger.</p>
+<section class="card" id="done" hidden>
+  <div class="who"><img id="avatar" alt="" src="/assets/icon.png"><div><b id="name"></b><span class="badge-ok">✓ Verified</span></div></div>
+  <p id="detail" class="muted"></p>
+  <a class="btn discord" id="open" target="_blank" rel="noopener">Open the Luger Discord</a>
+</section>
+<p class="err" id="err" role="alert"></p>
+<a class="btn" id="retry" href="/verify/" hidden>Start again</a>
+</div>
+<script src="/config.js?v=1795300000"></script><script src="/site.js?v=1795300000"></script><script src="/consent.js?v=1795300000"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search)
+  history.replaceState(null, '', '/verify/callback/') // keep the one-time code out of history
+  const fail = (m) => { $('#title').textContent = 'Not verified'; $('#msg').textContent = ''; $('#err').textContent = m; show($('#retry'), true) }
+  if (q.get('error')) return fail(q.get('error') === 'access_denied' ? 'You cancelled on Discord. Nothing was changed.' : 'Discord could not complete the sign-in.')
+  if (!q.get('code') || !q.get('state')) return fail('This page needs to be opened by Discord. Start from the verify page.')
+  try {
+    const r = await call('api', { action: 'discord.finish', code: q.get('code'), state: q.get('state') })
+    $('#title').textContent = 'You’re verified'
+    $('#msg').textContent = r.linkedToLuger ? 'Your Discord is now linked to your Luger account.' : 'Your Discord is now verified with Luger.'
+    $('#name').textContent = r.username
+    if (r.avatar) $('#avatar').src = r.avatar
+    $('#detail').textContent = r.joined === 'added' ? 'You’ve joined the Luger server with the Verified role.' : r.joined === 'already' ? 'You already were in the Luger server. The Verified role has been added.' : 'Verified. We couldn’t add you to the server automatically, so use the button below to join.'
+    $('#open').href = (window.LUGER && window.LUGER.discord) || 'https://discord.gg/zTnwbjHu4e'
+    show($('#done'), true)
+  } catch (e) { fail(e.message) }
+})()
+</script>
+</body></html>

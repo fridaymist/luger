@@ -75,6 +75,14 @@ export async function mockCall(action: string, body: any, token: string | null):
       return { url: 'https://lugerhub.fun/thanks', id: 'cs_test_offline' }
     case 'checkout.claim':
       return { keys: [] }
+    case 'discord.linkToken':
+      return { url: 'https://lugerhub.fun/verify/' }
+    case 'discord.status':
+      return { linked: false }
+    case 'admin.discord.stats':
+      return { total: 42, active: 40, withLuger: 31, mainGuild: '123456789012345678' }
+    case 'admin.discord.pull':
+      return { added: 12, already: 3, failed: 0, revoked: 0, next: null, done: true }
     case 'checkpoint.providers':
       return { providers: ['lootlabs', 'linkvertise', 'workink'] }
     case 'checkpoint.start':

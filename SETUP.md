@@ -116,7 +116,21 @@ git tag v0.9.0
 git push --tags
 ```
 
-## 8. Optional
+## 8. Discord verification
+
+People verify at `lugerhub.fun/verify` (from **Settings → Account** in the app, or a link you post). They accept the Terms, get the Verified role and allow Luger to add them to Luger servers.
+
+1. Go to discord.com/developers/applications → **New Application** → name it **Luger**.
+2. **OAuth2** page: copy the **Client ID** into `DISCORD_CLIENT_ID=`, click **Reset Secret** and copy it into `DISCORD_CLIENT_SECRET=`. Under **Redirects** add `https://lugerhub.fun/verify/callback/` and save.
+3. **Bot** page: click **Reset Token**, copy it into `DISCORD_BOT_TOKEN=`. Leave Public Bot off.
+4. **OAuth2 → URL Generator**: tick `bot`, then permissions **Create Instant Invite** and **Manage Roles**. Open the generated link and add the bot to your server.
+5. In your server: **Server Settings → Roles**, create a **Verified** role and drag the Luger bot's role **above** it.
+6. In Discord turn on **User Settings → Advanced → Developer Mode**. Right-click your server → **Copy Server ID** into `DISCORD_GUILD_ID=`. Right-click the Verified role → **Copy Role ID** into `DISCORD_VERIFIED_ROLE_ID=`.
+7. Run `npx supabase secrets set --env-file .secrets.env`.
+
+To add everyone who verified to another server: add the Luger bot there (step 4), then use **Owner → Discord** in the app.
+
+## 9. Optional
 
 - **Discord status:** create an application at discord.com/developers. Add
   `"discordAppId": "<its id>"` to `luger.config.json`, and upload an art asset named

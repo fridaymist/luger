@@ -6,13 +6,13 @@ import { api, invoke } from '../lib/bridge'
 import { ago, duration, money } from '../lib/format'
 import { fail, hasRole, toast, useStore } from '../lib/state'
 
-type Tab = 'overview' | 'keys' | 'scripts' | 'staff' | 'moderation' | 'settings'
+type Tab = 'overview' | 'keys' | 'scripts' | 'staff' | 'moderation' | 'discord' | 'settings'
 
 export default function Owner() {
   const me = useStore((s) => s.me)
   const owner = hasRole(me, 'owner')
   const tabs: { value: Tab; label: string }[] = owner
-    ? [{ value: 'overview', label: 'Overview' }, { value: 'keys', label: 'Keys' }, { value: 'scripts', label: 'Public scripts' }, { value: 'staff', label: 'Staff' }, { value: 'moderation', label: 'Moderation' }, { value: 'settings', label: 'Free keys' }]
+    ? [{ value: 'overview', label: 'Overview' }, { value: 'keys', label: 'Keys' }, { value: 'scripts', label: 'Public scripts' }, { value: 'staff', label: 'Staff' }, { value: 'moderation', label: 'Moderation' }, { value: 'discord', label: 'Discord' }, { value: 'settings', label: 'Free keys' }]
     : [{ value: 'scripts', label: 'Public scripts' }, { value: 'moderation', label: 'Moderation' }]
   const [tab, setTab] = useState<Tab>(tabs[0].value)
   if (!hasRole(me, 'owner', 'developer', 'editor')) return <div className="page"><Empty title="Staff only" /></div>
@@ -28,6 +28,7 @@ export default function Owner() {
         {tab === 'scripts' && <Scripts />}
         {tab === 'staff' && <Staff />}
         {tab === 'moderation' && <Moderation />}
+        {tab === 'discord' && <DiscordPanel />}
         {tab === 'settings' && <CheckpointSettings />}
       </div>
     </>
@@ -383,6 +384,49 @@ function CheckpointSettings() {
         <div className="row">{['lootlabs', 'linkvertise', 'workink'].map((p) => <button key={p} className="chip" aria-pressed={cfg.providers.includes(p)} onClick={() => toggle(p)}>{{ lootlabs: 'LootLabs', linkvertise: 'Linkvertise', workink: 'Work.ink' }[p]}</button>)}</div>
       </div>
       <div><button className="btn primary" onClick={() => api('admin.settings.set', { key: 'checkpoint', value: cfg }).then(() => toast('Saved. New checkpoints use these settings.')).catch(fail)}>Save</button></div>
+    </div>
+  )
+}
+
+// ------------------------------------------------------------------ discord
+function DiscordPanel() {
+  const st = useAsync(() => api('admin.discord.stats'), [])
+  const [guild, setGuild] = useState('')
+  const [role, setRole] = useState('')
+  const [run, setRun] = useState<{ added: number; already: number; failed: number; revoked: number; busy: boolean } | null>(null)
+
+  async function pull() {
+    let cursor: string | null = null
+    const t = { added: 0, already: 0, failed: 0, revoked: 0, busy: true }
+    setRun({ ...t })
+    try {
+      for (;;) {
+        const r: any = await api('admin.discord.pull', { guildId: guild.trim(), roleId: role.trim() || undefined, cursor })
+        t.added += r.added; t.already += r.already; t.failed += r.failed; t.revoked += r.revoked
+        setRun({ ...t })
+        if (r.done || !r.next) break
+        cursor = r.next
+      }
+      toast(`Done: ${t.added} added, ${t.already} already there.`)
+    } catch (e) { fail(e) } finally { setRun({ ...t, busy: false }); st.reload() }
+  }
+
+  return (
+    <div className="pgrid">
+      <section>
+        <div className="statgrid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          {[['Verified on Discord', st.data?.active], ['Linked to Luger accounts', st.data?.withLuger], ['Removed Luger since', (st.data?.total ?? 0) - (st.data?.active ?? 0)]].map(([l, n]) => <div key={l as string} className="stat card"><b className="num">{Number(n ?? 0).toLocaleString()}</b><span className="muted small">{l}</span></div>)}
+        </div>
+        <p className="muted small" style={{ marginTop: 14 }}>People verify at lugerhub.fun/verify (from <b>Settings → Account</b> in the app, or a link you post in Discord). They agree to the Terms, get the Verified role and allow Luger to add them to Luger servers. Anyone who removes Luger from their Discord authorised apps drops out automatically.</p>
+      </section>
+      <section className="panel pad stack">
+        <b>Add verified members to a server</b>
+        <label className="field"><span>Server ID</span><input className="input mono" placeholder="123456789012345678" value={guild} onChange={(e) => setGuild(e.target.value)} /></label>
+        <label className="field"><span>Role to give them (optional role ID)</span><input className="input mono" value={role} onChange={(e) => setRole(e.target.value)} /></label>
+        <p className="muted small" style={{ margin: 0 }}>The Luger bot must already be in that server with the <b>Create Invite</b> and <b>Manage Roles</b> permissions, and its role must sit above the role you give. In Discord, turn on Developer Mode, then right-click the server or role → Copy ID.</p>
+        <div><button className="btn primary" disabled={!guild.trim() || !!run?.busy} onClick={pull}>{run?.busy ? 'Adding…' : 'Add everyone'}</button></div>
+        {run && <div className="row small" style={{ flexWrap: 'wrap', gap: 14 }}><span className="num"><b>{run.added}</b> added</span><span className="num"><b>{run.already}</b> already there</span><span className="num"><b>{run.failed}</b> failed</span><span className="num"><b>{run.revoked}</b> removed Luger</span></div>}
+      </section>
     </div>
   )
 }

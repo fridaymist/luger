@@ -1,6 +1,7 @@
 // Luger API. Every request is POST {action, ...}. Most actions need the signed session
 // token from a redeemed key; the few public ones are listed in PUBLIC.
 import catalog from '../_shared/catalog.json' with { type: 'json' }
+import * as discord from '../_shared/discord.ts'
 import { createKeys, redeem, sessionFor, touchDevice, type KeyKind } from '../_shared/keys.ts'
 import { moderate } from '../_shared/moderation.ts'
 import { award, levelFor } from '../_shared/progress.ts'
@@ -8,7 +9,7 @@ import * as roblox from '../_shared/roblox.ts'
 import { looksLikeAhk, scanPython } from '../_shared/scan.ts'
 import { createCheckout } from '../_shared/stripe.ts'
 import {
-  clientIp, db, getSetting, handle, HttpError, int, limit, liveProviders, readSession, requireRole, requireSession, requireVerified,
+  clientIp, db, getSetting, handle, HttpError, int, limit, liveProviders, randomToken, readSession, requireRole, requireSession, requireVerified,
   type Session, str, unseal
 } from '../_shared/util.ts'
 
@@ -160,6 +161,44 @@ const PUBLIC: Record<string, Action> = {
     return { players, macros, keys, games: catalog.games.length }
   },
 
+  // ---------------------------------------------------------------- Discord verification (lugerhub.fun/verify)
+  async 'discord.start'({ req, body }) {
+    await limit(`dstart:${clientIp(req)}`, 20, 3600)
+    if (body.accepted !== true || body.consentVersion !== discord.CONSENT_VERSION) throw new HttpError(400, 'Agree to the terms first.')
+    let state = typeof body.t === 'string' && /^[a-f0-9]{48}$/.test(body.t) ? body.t : null
+    if (state) {
+      const { data } = await db.from('discord_states').select('created_at').eq('state', state).maybeSingle()
+      if (!data || Date.now() - Date.parse(data.created_at) > 30 * 60 * 1000) state = null
+    }
+    if (!state) {
+      state = randomToken(24)
+      await db.from('discord_states').insert({ state })
+    }
+    await db.from('discord_states').delete().lt('created_at', new Date(Date.now() - 3600 * 1000).toISOString())
+    return { url: discord.authorizeUrl(state) }
+  },
+
+  async 'discord.finish'({ req, body }) {
+    await limit(`dfinish:${clientIp(req)}`, 20, 3600)
+    const state = String(body.state ?? '')
+    const code = String(body.code ?? '')
+    if (!/^[a-f0-9]{48}$/.test(state) || !/^[\w-]{10,100}$/.test(code)) throw new HttpError(400, 'This verification link is broken. Start again.')
+    const { data: st } = await db.from('discord_states').delete().eq('state', state).select('roblox_id, created_at').maybeSingle()
+    if (!st || Date.now() - Date.parse(st.created_at) > 30 * 60 * 1000) throw new HttpError(400, 'This verification expired. Start again.')
+    const t = await discord.exchangeCode(code)
+    const user = await discord.me(t.access_token)
+    await discord.saveLink(t, user, st.roblox_id ?? null)
+    const roles = [Deno.env.get('DISCORD_VERIFIED_ROLE_ID')].filter(Boolean) as string[]
+    const guild = Deno.env.get('DISCORD_GUILD_ID')
+    const joined = guild ? await discord.joinGuild(guild, user.id, t.access_token, roles) : 'failed'
+    return {
+      username: user.global_name ?? user.username,
+      avatar: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` : null,
+      joined,
+      linkedToLuger: !!st.roblox_id
+    }
+  },
+
   async 'checkpoint.providers'() {
     const cfg = await getSetting('checkpoint', { providers: ['lootlabs', 'linkvertise', 'workink'] } as any)
     return { providers: liveProviders(cfg.providers) }
@@ -263,6 +302,20 @@ const PRIVATE: Record<string, Action> = {
       await db.from('key_redemptions').insert({ key_id: best.id, device_id: s!.sub, roblox_id: rid })
     }
     return sessionFor(best.id, s!.sub, rid)
+  },
+
+  async 'discord.linkToken'({ s }) {
+    const rid = requireVerified(s!)
+    await limit(`dlink:${rid}`, 10, 3600)
+    const state = randomToken(24)
+    await db.from('discord_states').insert({ state, roblox_id: rid })
+    return { url: `${Deno.env.get('LUGER_SITE_URL') ?? 'https://lugerhub.fun'}/verify/?t=${state}` }
+  },
+
+  async 'discord.status'({ s }) {
+    if (!s!.rid || !s!.ver) return { linked: false }
+    const { data } = await db.from('discord_links').select('username, global_name, revoked').eq('roblox_id', s!.rid).order('updated_at', { ascending: false }).limit(1).maybeSingle()
+    return data && !data.revoked ? { linked: true, username: data.global_name ?? data.username } : { linked: false }
   },
 
   // -------------------------------------------------------------- games
@@ -785,6 +838,37 @@ const PRIVATE: Record<string, Action> = {
     const revenue: Record<string, number> = {}
     for (const o of ordersWeek.data ?? []) revenue[o.currency ?? 'gbp'] = (revenue[o.currency ?? 'gbp'] ?? 0) + (o.amount ?? 0) / 100
     return { keys, adKeysDay, redeemsDay, users, macros, held, reportsOpen, ordersWeek: (ordersWeek.data ?? []).length, revenueWeek: revenue }
+  },
+
+  async 'admin.discord.stats'({ s }) {
+    requireRole(s!, ['owner'])
+    const count = async (q: any) => (await q).count ?? 0
+    const [total, active, withLuger] = await Promise.all([
+      count(db.from('discord_links').select('discord_id', { count: 'exact', head: true })),
+      count(db.from('discord_links').select('discord_id', { count: 'exact', head: true }).eq('revoked', false)),
+      count(db.from('discord_links').select('discord_id', { count: 'exact', head: true }).eq('revoked', false).not('roblox_id', 'is', null))
+    ])
+    return { total, active, withLuger, mainGuild: Deno.env.get('DISCORD_GUILD_ID') ?? null }
+  },
+
+  /** Add verified members to a server the Luger bot is in, a batch at a time. */
+  async 'admin.discord.pull'({ s, body }) {
+    requireRole(s!, ['owner'])
+    const guildId = String(body.guildId ?? '')
+    if (!/^\d{17,20}$/.test(guildId)) throw new HttpError(400, 'Server ID must be the long number from Discord (Copy Server ID).')
+    const roleId = body.roleId ? String(body.roleId) : ''
+    if (roleId && !/^\d{17,20}$/.test(roleId)) throw new HttpError(400, 'Role ID must be a long number.')
+    let q = db.from('discord_links').select('*').eq('revoked', false).order('discord_id').limit(15)
+    if (body.cursor) q = q.gt('discord_id', String(body.cursor))
+    const { data } = await q
+    const tally = { added: 0, already: 0, failed: 0, revoked: 0 }
+    for (const link of data ?? []) {
+      const access = await discord.accessFor(link)
+      if (!access) { tally.revoked++; continue }
+      tally[await discord.joinGuild(guildId, link.discord_id, access, roleId ? [roleId] : [])]++
+    }
+    const rows = data ?? []
+    return { ...tally, next: rows.length ? rows[rows.length - 1].discord_id : null, done: rows.length < 15 }
   },
 
   async 'fflags'() {

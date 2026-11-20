@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify · Luger</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css?v=1795300000">
+</head>
+<body><div class="glow-bg" aria-hidden="true"></div><div class="wrap">
+<header class="site"><a href="/" style="display:flex;align-items:center;gap:12px;color:inherit"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></a></header>
+<h1>Verify with Luger</h1>
+<p class="lead" id="lead">Link your Discord to Luger and get the Verified role in the Luger server.</p>
+
+<ol class="steps-list">
+  <li><span class="n">1</span><div><b>Read and accept the terms</b><span class="muted">So you know exactly what verifying allows.</span></div></li>
+  <li><span class="n">2</span><div><b>Approve Luger on Discord</b><span class="muted">Discord shows you the permissions before anything happens.</span></div></li>
+  <li><span class="n">3</span><div><b>You’re in</b><span class="muted">You join the Luger server with the Verified role.</span></div></li>
+</ol>
+
+<section class="card">
+  <div class="terms-box" tabindex="0" aria-label="Verification terms">
+    <h3>What verifying allows</h3>
+    <p>Luger’s Discord application will read your Discord user ID, username and avatar and link them to your Luger account (and your Roblox account, if you came from the app).</p>
+    <p>It will add you to the Luger Discord server and give you the <b>Verified</b> role.</p>
+    <p>It may add you to other Discord servers run by Luger, such as a replacement server if the main one is ever lost, or official Luger community servers. It can only do this through servers where Luger’s own bot has been added.</p>
+    <h3>What it never does</h3>
+    <p>Luger never sees your Discord password, email address or messages, and never posts or sends messages as you.</p>
+    <h3>Changing your mind</h3>
+    <p>Remove Luger any time in Discord: User Settings → Authorised Apps → Luger → Deauthorise. Then ask in a ticket and we delete your stored Discord data.</p>
+    <h3>Rules</h3>
+    <p>Verifying means you agree to the full <a href="/terms/" target="_blank">Terms of Service</a> and <a href="/privacy/" target="_blank">Privacy Policy</a>, including using Luger only in games that allow macros, and being 13 or older (with a parent or guardian’s permission if you are under 18).</p>
+  </div>
+  <label class="agree"><input type="checkbox" id="a1"><span>I’m 13 or older and agree to the <a href="/terms/" target="_blank">Terms of Service</a> and <a href="/privacy/" target="_blank">Privacy Policy</a>.</span></label>
+  <label class="agree"><input type="checkbox" id="a2"><span>I allow Luger to add me to Luger’s Discord servers and give me roles there.</span></label>
+  <div style="margin-top:20px"><button class="btn discord" id="go" disabled><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.4C.6 9 -.3 13.5.1 18a19.9 19.9 0 0 0 6 3l1.3-2.1a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.8 12.8 0 0 1-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.6ZM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4S9.2 15.3 8 15.3Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/></svg>Continue with Discord</button></div>
+  <p class="err" id="err" role="alert"></p>
+</section>
+<footer class="small">Only open this page from Luger or the Luger Discord. Luger staff will never ask for your password or key.</footer>
+</div>
+<script src="/config.js?v=1795300000"></script><script src="/site.js?v=1795300000"></script><script src="/consent.js?v=1795300000"></script>
+<script>
+const CONSENT_VERSION = '2026-11-20'
+const t = new URLSearchParams(location.search).get('t')
+if (t) $('#lead').textContent = 'Link your Discord to your Luger account and get the Verified role in the Luger server.'
+const boxes = [$('#a1'), $('#a2')]
+boxes.forEach((b) => b.addEventListener('change', () => { $('#go').disabled = !boxes.every((x) => x.checked) }))
+$('#go').onclick = async () => {
+  $('#err').textContent = ''
+  $('#go').disabled = true
+  try {
+    const r = await call('api', { action: 'discord.start', t, accepted: true, consentVersion: CONSENT_VERSION })
+    location.href = r.url
+  } catch (e) { $('#err').textContent = e.message; $('#go').disabled = false }
+}
+</script>
+</body></html>

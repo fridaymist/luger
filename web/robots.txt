@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /verify/
+Disallow: /key/
+Disallow: /thanks/
+Sitemap: https://lugerhub.fun/sitemap.xml

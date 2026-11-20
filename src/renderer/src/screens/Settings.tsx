@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Avatar } from '../components/identity'
 import { Confirm, KeyInput, Seg, Switch, useAsync } from '../components/ui'
 import { refreshMe, saveSettings } from '../lib/actions'
-import { invoke } from '../lib/bridge'
+import { api, invoke } from '../lib/bridge'
 import { themeById } from '../lib/catalog'
 import { duration, money } from '../lib/format'
 import { fail, go, setState, toast, useStore } from '../lib/state'
@@ -95,11 +95,22 @@ export default function Settings() {
             <Line control={<span className="num" style={{ fontWeight: 700 }}>{info?.version}</span>}>Luger version</Line>
             <Line control={<Seg label="Updates" value={s.updateChannel} onChange={(v) => set({ updateChannel: v })} options={[{ value: 'stable', label: 'Stable' }, { value: 'beta', label: 'Early' }]} />} hint="Luger updates itself in the background and asks before restarting.">Which updates to get</Line>
             <Line control={<button className="btn sm ghost" onClick={() => invoke('app:open', 'https://lugerhub.fun')}><ExternalLink size={13} />lugerhub.fun</button>}>Website</Line>
+            <Line control={<span className="row"><button className="btn sm ghost" onClick={() => invoke('app:open', 'https://lugerhub.fun/terms/')}>Terms</button><button className="btn sm ghost" onClick={() => invoke('app:open', 'https://lugerhub.fun/privacy/')}>Privacy</button><button className="btn sm ghost" onClick={() => invoke('app:open', 'https://lugerhub.fun/refunds/')}>Refunds</button></span>}>Terms and policies</Line>
             <p className="muted small sfoot">Luger only sends keyboard and mouse input, like you would, and never modifies Roblox. Use macros only in games whose rules allow them. Fonts: Bricolage Grotesque and Figtree (SIL Open Font License). Icons: Lucide (ISC).</p>
           </section>
         </div>
       </div>
     </>
+  )
+}
+
+function DiscordLine() {
+  const st = useAsync(() => api('discord.status'), [])
+  return (
+    <Line hint={st.data?.linked ? 'Linked. You have the Verified role in the Luger Discord.' : 'Links your Discord to Luger and gives you the Verified role in the Luger server.'}
+      control={<button className={`btn sm ${st.data?.linked ? '' : 'discord-btn'}`} onClick={() => invoke('discord:verify').catch(fail)}>{st.data?.linked ? 'Verify again' : 'Verify on Discord'}</button>}>
+      {st.data?.linked ? <>Discord: <b>{st.data.username}</b></> : 'Discord not verified yet'}
+    </Line>
   )
 }
 
@@ -157,6 +168,7 @@ function Account() {
         </div>
       )}
 
+      {me?.verified && <DiscordLine />}
       <Line control={<button className="btn sm danger" onClick={() => setSignOut(true)}><LogOut size={13} />Sign out</button>}
         hint={exp ? `Ends ${new Date(exp * 1000).toLocaleString()}${left !== null && left < 86400000 * 2 ? ' · extend below to keep going' : ''}` : 'Never ends.'}>
         Your key: {exp ? `${duration(Math.max(0, Math.round((left ?? 0) / 1000 / 3600)) * 3600)} left` : 'lifetime'}
