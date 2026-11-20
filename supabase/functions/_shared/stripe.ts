@@ -48,6 +48,8 @@ export async function createCheckout(item: CheckoutItem, metadata: Record<string
       price_data: {
         currency: 'gbp',
         unit_amount: Math.round(item.gbp * 100),
+        // The listed price is what buyers pay: VAT and sales tax come out of it, not on top.
+        tax_behavior: 'inclusive',
         // Required by Stripe Managed Payments: Luger keys and crystals are downloadable software for personal use.
         product_data: { name: item.name, description: item.description, tax_code: 'txcd_10202000' },
         recurring: item.recurring ? { interval: item.recurring } : undefined
