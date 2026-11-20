@@ -3,6 +3,9 @@
 Luger's version is shown only in Settings → About. Every release bumps it here and in
 package.json; the app updates itself. 1.0.0 is reserved for the first fully public release.
 
+## 0.9.3
+- Mac downloads open with right-click → Open instead of showing “damaged”.
+
 ## 0.9.2
 - Verify on Discord from Settings → Account: links your Discord, gives you the Verified role.
 - Owner → Discord: add verified members to any Luger server.

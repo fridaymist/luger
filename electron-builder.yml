@@ -1,4 +1,5 @@
 appId: fun.lugerhub.app
+afterSign: build/adhoc-sign.cjs
 productName: Luger
 directories:
   output: release
