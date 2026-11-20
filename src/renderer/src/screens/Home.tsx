@@ -70,14 +70,14 @@ export default function Home() {
   return (
     <>
       <header className="topbar drag">
-        <div className="search nodrag" style={{ width: 300 }}>
+        <div className="search nodrag" style={{ width: 300, minWidth: 150, flexShrink: 1 }}>
           <Search size={15} />
           <input className="input" placeholder="Search Roblox games" value={q} onChange={(e) => { setQ(e.target.value); if (!e.target.value) setResults(null) }} onKeyDown={(e) => e.key === 'Enter' && search()} />
         </div>
         <button className="btn ghost nodrag" onClick={() => setTweaks(true)}><SlidersHorizontal size={15} />Tweaks</button>
         <div className="grow" />
         <div className="greet nodrag">
-          <span>{greeting()}, <b>{name ? `@${name}` : 'player'}</b></span>
+          <span><span className="hello">{greeting()}, </span><b>{name ? `@${name}` : 'player'}</b></span>
           <Avatar src={me?.user?.avatar_url ?? detected?.avatar} name={name ?? undefined} size={34} frame={me?.user?.frame} />
         </div>
       </header>

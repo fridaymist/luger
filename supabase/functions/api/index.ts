@@ -150,6 +150,16 @@ const PUBLIC: Record<string, Action> = {
     return { keys }
   },
 
+  async 'site.stats'() {
+    const count = async (q: any) => (await q).count ?? 0
+    const [players, macros, keys] = await Promise.all([
+      count(db.from('users').select('roblox_id', { count: 'exact', head: true })),
+      count(db.from('macros').select('id', { count: 'exact', head: true }).eq('status', 'live')),
+      count(db.from('key_redemptions').select('key_id', { count: 'exact', head: true }))
+    ])
+    return { players, macros, keys, games: catalog.games.length }
+  },
+
   async 'checkpoint.providers'() {
     const cfg = await getSetting('checkpoint', { providers: ['lootlabs', 'linkvertise', 'workink'] } as any)
     return { providers: liveProviders(cfg.providers) }

@@ -5,6 +5,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync,
 import { extname, join, normalize } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import catalog from '../../supabase/functions/_shared/catalog.json'
+import config from '../../luger.config.json'
 import * as api from './api'
 import { deviceId } from './device'
 import { closePresence, setPresence } from './discord'
@@ -40,8 +41,8 @@ function createWindow(): void {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    minWidth: 980,
-    minHeight: 640,
+    minWidth: 860,
+    minHeight: 560,
     show: false,
     backgroundColor: '#15171c',
     title: 'Luger',
@@ -58,6 +59,10 @@ function createWindow(): void {
       spellcheck: false
     }
   })
+  if (!app.isPackaged && process.env.LUGER_WINDOW) {
+    const [w, h] = process.env.LUGER_WINDOW.split('x').map(Number)
+    win.setSize(w, h)
+  }
   win.once('ready-to-show', () => win?.show())
   win.on('close', (e) => {
     if (!quitting && settings.get('closeToTray')) {
@@ -302,6 +307,7 @@ const handlers: Record<string, Handler> = {
     locale: app.getLocale()
   }),
   'app:open': (url: string) => openSafe(url),
+  'app:discord': () => openSafe((config as any).discord ?? 'https://discord.gg/zTnwbjHu4e'),
   'app:restartToUpdate': () => {
     quitting = true
     autoUpdater.quitAndInstall()

@@ -12,10 +12,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14        # Apple silicon; also publishes the Mac update feed
+          - os: macos-latest    # Apple silicon; also publishes the Mac update feed
             target: mac
             publish: always
-          - os: macos-13        # Intel Macs: installer attached to the release
+          - os: macos-15-intel  # Intel Macs: installer attached to the release
             target: mac
             publish: never
           - os: windows-latest
@@ -26,8 +26,8 @@ jobs:
             publish: always
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm

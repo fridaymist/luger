@@ -4,7 +4,7 @@
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.gate { position: relative; height: 100%; display: grid; grid-template-columns: 1.1fr minmax(380px, 460px); gap: 48px; align-items: center; padding: 48px 64px; overflow: auto; }
+.gate { position: relative; height: 100%; min-height: 0; display: grid; grid-template-columns: 1.1fr minmax(380px, 460px); gap: 48px; align-items: center; padding: 48px 64px; overflow: auto; }
 .gate-drag { position: absolute; inset: 0 0 auto 0; height: 40px; }
 .gate-hero { max-width: 520px; }
 .gate-logo { width: min(340px, 80%); height: auto; margin-bottom: 28px; }
@@ -29,7 +29,8 @@
 @media (max-width: 1080px) { .gate { grid-template-columns: 1fr; padding: 48px 32px; } .gate-hero h1 { font-size: 48px; } }
 
 /* ------------------------------------------------------------ home */
-.greet { display: flex; align-items: center; gap: 12px; font-size: 14.5px; }
+.greet { display: flex; align-items: center; gap: 12px; font-size: 14.5px; white-space: nowrap; flex-shrink: 0; }
+@media (max-width: 1050px) { .greet .hello { display: none; } }
 .greet b { font-weight: 700; }
 .first-run { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
 .continue { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--gap); }
@@ -74,6 +75,8 @@
 
 /* ------------------------------------------------------------ macros */
 .macros { position: relative; display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.macros-body > .page, .macros-side { overflow: auto; }
+@media (max-width: 1150px) { .macros-body.with-window { grid-template-columns: 1fr 300px; } .featured { grid-template-columns: 1fr 1fr; } .packs { grid-template-columns: repeat(3, 1fr); } .continue, .pgrid, .game-modal, .add-grid, .tool { grid-template-columns: 1fr; } .statgrid { grid-template-columns: repeat(2, 1fr); } .pbody { grid-template-columns: auto 1fr; } .plevel { grid-column: span 2; } }
 .filterbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 28px 12px; }
 .macros-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr; }
 .macros-body.with-window { grid-template-columns: 1fr 340px; }
@@ -279,7 +282,8 @@ textarea.code { font: 12.5px/1.55 var(--mono); min-height: 52vh; white-space: pr
 .pack-bonus { background: color-mix(in srgb, var(--good) 20%, transparent); color: var(--good); }
 
 /* ------------------------------------------------------------ settings */
-.settings { flex: 1; min-height: 0; display: grid; grid-template-columns: 180px 1fr; }
+.settings { flex: 1; min-height: 0; display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+.sindex { overflow-y: auto; }
 .sindex { display: flex; flex-direction: column; gap: 2px; padding: 8px 0 0 28px; }
 .sindex button { position: relative; height: 32px; padding: 0 12px; border: 0; background: none; text-align: left; color: var(--muted); cursor: pointer; border-radius: 6px; font-weight: 500; }
 .sindex button:hover { color: var(--text); }
@@ -309,3 +313,6 @@ textarea.code { font: 12.5px/1.55 var(--mono); min-height: 52vh; white-space: pr
 .bulkline { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 10px; border-radius: var(--r-card); background: color-mix(in srgb, var(--accent) 10%, var(--surface2)); }
 .formgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .formgrid .span2 { grid-column: span 2; }
+
+.discord-btn { background: #5865f2; color: #fff; border-color: transparent; }
+.discord-btn:hover:not(:disabled) { filter: brightness(1.08); }

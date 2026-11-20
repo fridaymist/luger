@@ -16,7 +16,9 @@
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--text); font: 14px/1.5 var(--body); -webkit-font-smoothing: antialiased; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font: 14px/1.5 var(--body); -webkit-font-smoothing: antialiased; overflow: hidden; user-select: none; -webkit-user-select: none; }
+input, textarea, [contenteditable], .codeview, .phrase, .selectable, pre, code { user-select: text; -webkit-user-select: text; }
+img { -webkit-user-drag: none; }
 button, input, select, textarea { font: inherit; color: inherit; }
 img { display: block; }
 ::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
@@ -34,14 +36,16 @@ img { display: block; }
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ------------------------------------------------------------ layout */
-.app { display: grid; grid-template-columns: var(--rail) 1fr; height: 100%; position: relative; }
+.app { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); height: 100%; position: relative; }
+@media (max-width: 1100px) { :root { --rail: 188px; } .topbar { gap: 10px; padding-left: 20px; } .page { padding-left: 20px; padding-right: 20px; } }
+@media (max-height: 700px) { .rail { padding-top: 40px; } .brand { padding-bottom: 12px; } .nav button { height: 34px; } }
 .backdrop { position: fixed; inset: 0; z-index: 0; background-size: cover; background-position: center; pointer-events: none; }
 .backdrop::after { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: var(--dim, .55); }
 .rail, .main { position: relative; z-index: 1; }
 .drag { -webkit-app-region: drag; }
 .nodrag, .drag button, .drag input, .drag a { -webkit-app-region: no-drag; }
 
-.rail { display: flex; flex-direction: column; padding: 44px 12px 14px; border-right: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(18px); }
+.rail { display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; min-height: 0; padding: 44px 12px 14px; border-right: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(18px); }
 :root[data-platform='darwin'] .rail { padding-top: 52px; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 22px; }
 .brand img { width: 42px; height: auto; }
@@ -59,12 +63,12 @@ img { display: block; }
 .me-chip { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: var(--r-card); border: 0; background: none; cursor: pointer; text-align: left; width: 100%; }
 .me-chip:hover { background: var(--surface2); }
 
-.main { display: flex; flex-direction: column; min-width: 0; height: 100%; }
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; height: 100%; overflow: hidden; }
 .topbar { display: flex; align-items: center; gap: 14px; height: 64px; padding: 0 28px; flex-shrink: 0; }
 :root:not([data-platform='darwin']) .topbar { padding-right: 150px; }
 .topbar h1 { margin: 0; font: 700 24px/1 var(--display); letter-spacing: -0.02em; }
 .topbar .sub { color: var(--muted); }
-.page { flex: 1; overflow: auto; padding: 4px 28px 40px; }
+.page { flex: 1; min-height: 0; overflow: auto; padding: 4px 28px 40px; }
 .page-narrow { max-width: 920px; }
 
 h2.section { font: 600 16px/1.2 var(--display); margin: 28px 0 12px; display: flex; align-items: baseline; gap: 10px; }

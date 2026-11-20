@@ -2,25 +2,148 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Luger</title>
-<meta name="description" content="Luger: macros, an auto clicker, a recorder and a game launcher for Roblox games that allow macros.">
-<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css">
+<title>Luger · Macros that play fair</title>
+<meta name="description" content="Luger runs your Roblox macros, converts AutoHotkey scripts to Python, records and replays inputs and launches your games. For games that allow macros.">
+<meta property="og:title" content="Luger"><meta property="og:description" content="Macros that play fair."><meta property="og:image" content="https://lugerhub.fun/assets/shots/home.jpg">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/assets/icon.png"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/home.css">
 </head>
-<body><div class="wrap">
-<header class="site"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></header>
-<h1>Your macros, your games, one launcher.</h1>
-<p class="lead">Luger runs Python macros, converts your AutoHotkey scripts, records and replays inputs, and launches Roblox with your tweaks. For games that allow macros.</p>
-<a class="btn primary" id="dl" href="#">Download Luger</a>
-<h2>Keys</h2>
-<p class="muted">Get a free key from inside the app by passing a few short ad checkpoints, or buy one to skip the ads. Paid keys are delivered in the app the moment payment goes through.</p>
-<div class="plans">
-  <div class="plan"><span class="muted">Weekly</span><b>£4.99</b><span class="muted">Renews weekly</span></div>
-  <div class="plan"><span class="muted">Monthly</span><b>£9.99</b><span class="muted">Renews monthly</span></div>
-  <div class="plan"><span class="muted">Lifetime</span><b>£19.99</b><span class="muted">One payment</span></div>
-</div>
-<p class="muted">Checkout shows your own currency. Buy from Settings → Account in the app so the key lands straight on your device.</p>
-<footer>Luger only sends keyboard and mouse input, like you would. It does not modify Roblox. Use it in games whose rules allow macros.</footer>
-</div>
-<script src="/config.js"></script>
-<script>document.getElementById('dl').href = window.LUGER.download</script>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<div class="spot" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Main">
+  <a class="nav-brand" href="#top"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></a>
+  <div class="nav-links">
+    <a href="#features">Features</a><a href="#games">Games</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+  </div>
+  <a class="btn sm discord" data-discord href="#"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span>Join Discord</span></a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="hero-logo" data-reveal><span class="halo" aria-hidden="true"></span><img src="/assets/luger-logo.png" alt="Luger"></div>
+  <h1 class="hero-title" data-reveal>Macros that<br>play fair.</h1>
+  <p class="hero-sub" data-reveal>Run Python macros, turn your AutoHotkey scripts into Python, record and replay inputs, and launch Roblox with your tweaks. Built for games that allow macros.</p>
+  <div class="hero-cta" data-reveal>
+    <a class="btn primary" data-download href="#"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>Download Luger</a>
+    <a class="btn discord" data-discord href="#"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg>Get a key on Discord</a>
+  </div>
+  <p class="hero-os" data-reveal>Windows · macOS · Linux</p>
+  <div class="hero-shot" data-tilt>
+    <div class="shot-frame"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><img src="/assets/shots/home.jpg" alt="The Luger Bootstrapper showing recently played games and top playtime"></div>
+  </div>
+</header>
+
+<section class="stats" aria-label="Luger in numbers">
+  <div class="stat" data-reveal><b data-count="players">0</b><span>players</span></div>
+  <div class="stat" data-reveal><b data-count="macros">0</b><span>macros shared</span></div>
+  <div class="stat" data-reveal><b data-count="keys">0</b><span>keys activated</span></div>
+  <div class="stat" data-reveal><b data-count="games">6</b><span>games with mastery tracks</span></div>
+</section>
+
+<section class="section" id="features">
+  <h2 class="section-title" data-reveal>Everything a macro needs.<br><span>Nothing it shouldn’t.</span></h2>
+  <div class="bento">
+    <article class="tile t-show" data-reveal data-glow>
+      <div class="tile-head"><h3>One app for all of it</h3><p>Launch games, manage macros, find new ones and show off your progress.</p></div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-shot="home">Bootstrapper</button>
+        <button role="tab" data-shot="macros">Macros</button>
+        <button role="tab" data-shot="explore">Explore</button>
+        <button role="tab" data-shot="market">Marketplace</button>
+        <button role="tab" data-shot="profile">Profile</button>
+      </div>
+      <div class="tab-bar" aria-hidden="true"><i></i></div>
+      <div class="show-img"><img id="show" src="/assets/shots/home.jpg" alt="Luger screen"></div>
+    </article>
+
+    <article class="tile t-code" data-reveal data-glow>
+      <div class="tile-head"><h3>AutoHotkey in, Python out</h3><p>Drop an .ahk file. Luger rewrites it into Python and tells you about anything it couldn’t convert.</p></div>
+      <div class="code">
+        <div class="code-tab"><span class="ahk">fisher.ahk</span><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M5 12h14m-5-5 5 5-5 5"/></svg><span class="py">fisher.py</span></div>
+        <pre id="code" aria-label="Converted code"></pre>
+      </div>
+    </article>
+
+    <article class="tile t-click" data-reveal data-glow>
+      <div class="tile-head"><h3>Auto Clicker</h3><p>Any speed, any button, one key to start and stop.</p></div>
+      <div class="dial" aria-hidden="true"><span class="ring"></span><b id="cps">0</b><small>clicks / second</small></div>
+    </article>
+
+    <article class="tile t-safe" data-reveal data-glow>
+      <div class="tile-head"><h3>Safe by design</h3><p>Every macro is checked before it runs.</p></div>
+      <ul class="checks">
+        <li><span>Malware scan</span><b>Every file</b></li>
+        <li><span>Hidden code</span><b>Unpacked and rescanned</b></li>
+        <li><span>Sandbox</span><b>No internet access</b></li>
+        <li><span>Roblox client</span><b>Never touched</b></li>
+      </ul>
+    </article>
+
+    <article class="tile t-rec" data-reveal data-glow>
+      <div class="tile-head"><h3>Recorder</h3><p>Record a run once, replay it on loop at any speed, or turn it into an editable macro.</p></div>
+      <div class="wave" aria-hidden="true"><span class="rec-dot"></span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="games">
+  <h2 class="section-title" data-reveal>Level up in the games<br><span>you already play.</span></h2>
+  <p class="section-sub" data-reveal>Luger tracks your playtime from Roblox’s own logs. Every hour fills a mastery track with ammo, titles, frames and themes.</p>
+  <div class="marquee" aria-label="Supported games">
+    <div class="marquee-row" id="games-row"></div>
+  </div>
+  <div class="mastery" data-reveal>
+    <div class="mastery-head"><img src="/assets/games/fisch.png" alt=""><div><b>Fisch</b><span>Rank 4 · Roslit Bay Reeler</span></div><span class="pill">+400 ammo</span></div>
+    <ol class="mtrack" aria-label="Example mastery track">
+      <li class="got"><i></i><span>Welcome to Fisch!</span></li>
+      <li class="got"><i></i><span>Experienced Angler</span></li>
+      <li class="got"><i></i><span>Moosewood Regular</span></li>
+      <li class="got"><i></i><span>Roslit Bay Reeler</span></li>
+      <li><i></i><span>Snowcap Survivor</span></li>
+      <li><i></i><span>Legend of the Deep</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <h2 class="section-title" data-reveal>Free on Discord.<br><span>Or skip the wait.</span></h2>
+  <p class="section-sub" data-reveal>Grab a free key in the Luger Discord, or buy one inside the app. It activates the second you pay, and checkout shows your own currency.</p>
+  <div class="prices">
+    <div class="price" data-reveal data-glow><span class="price-name">Weekly</span><b data-price="key.weekly">£4.99</b><span class="muted">per week, cancel any time</span></div>
+    <div class="price" data-reveal data-glow><span class="price-name">Monthly</span><b data-price="key.monthly">£9.99</b><span class="muted">per month, cancel any time</span></div>
+    <div class="price best" data-reveal data-glow><span class="price-tag">Best value</span><span class="price-name">Lifetime</span><b data-price="key.lifetime">£19.99</b><span class="muted">one payment, yours forever</span></div>
+  </div>
+  <p class="price-note muted" data-reveal>Buy from <b>Settings → Account</b> in Luger so the key lands straight on your device.</p>
+</section>
+
+<section class="cta" data-reveal>
+  <div class="cta-inner">
+    <h2>Load up.</h2>
+    <p>Keys, giveaways, new public scripts and help all live in the Luger Discord.</p>
+    <div class="hero-cta"><a class="btn discord" data-discord href="#"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg>Join the Discord</a><a class="btn" data-download href="#">Download Luger</a></div>
+  </div>
+</section>
+
+<section class="section faq" id="faq">
+  <h2 class="section-title" data-reveal>Questions</h2>
+  <details data-reveal><summary>Can I get banned for using Luger?</summary><p>Luger only sends keyboard and mouse input, the same as you pressing keys. It never reads or changes the Roblox client. Use it in games whose rules allow macros, and check a game’s rules if you are unsure.</p></details>
+  <details data-reveal><summary>How do I get a key?</summary><p>Join the Discord for a free key, or buy a weekly, monthly or lifetime key inside the app. Paid keys activate as soon as checkout finishes.</p></details>
+  <details data-reveal><summary>Will my AutoHotkey scripts work?</summary><p>Common scripts convert completely: hotkeys, sends, clicks, loops, pixel searches, timers and simple windows. Anything Luger can’t convert is kept as a marked comment and listed, so nothing disappears quietly.</p></details>
+  <details data-reveal><summary>Are shared macros safe?</summary><p>Every macro is scanned for malware and hidden code before it can run or be published, and macros run in a sandbox with no internet or file access outside their own folder.</p></details>
+  <details data-reveal><summary>Which computers does it run on?</summary><p>Windows 10 and 11, macOS 12 or newer (Apple silicon and Intel), and Linux (AppImage or .deb). On a Mac, allow Luger under Accessibility the first time a macro runs.</p></details>
+</section>
+
+<footer class="foot">
+  <div class="foot-row">
+    <a class="nav-brand" href="#top"><img src="/assets/luger-logo.png" alt=""><b>Luger</b></a>
+    <span class="muted">Macros that play fair.</span>
+    <div class="foot-links"><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a data-download href="#">Download</a><a data-discord href="#" aria-label="Discord"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg></a></div>
+  </div>
+  <p class="muted fine">© <span id="year"></span> Luger. Not affiliated with Roblox Corporation. Use macros only where a game’s rules allow them.</p>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.4C.6 9 -.3 13.5.1 18a19.9 19.9 0 0 0 6 3l1.3-2.1a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.8 12.8 0 0 1-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.6ZM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4S9.2 15.3 8 15.3Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/></symbol></svg>
+<script src="/config.js"></script><script src="/home.js"></script>
 </body></html>
